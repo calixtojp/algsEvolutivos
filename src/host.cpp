@@ -2,5 +2,5 @@
 #include "host.h"
 
 void Host::show_personality(void){
-    printf("boa noite\n");
+    printf("bom dia\n");
 }

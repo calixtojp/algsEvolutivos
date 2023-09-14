@@ -1,5 +1,6 @@
 CXX = g++
 CXXFLAGS = -std=c++11 -Wall
+LDFLAGS = -lGL -lGLU -lglut
 
 SRC_DIR = src
 BUILD_DIR = build
@@ -24,10 +25,11 @@ $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
 $(EXECUTABLE): $(OBJS)
-	$(CXX) $(CXXFLAGS) $(OBJS) -o $@
+	$(CXX) $(CXXFLAGS) $(OBJS) -o $@ $(LDFLAGS)
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp $(HEADERS)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
 	rm -rf $(BUILD_DIR) $(EXECUTABLE)
+
