@@ -4,7 +4,7 @@
 class Meme {
 public:
 
-    Meme(unsigned char initialSpeed,
+    Meme(float initialSpeed,
         unsigned char initialAggressiveness,
         unsigned char initialReproductionRate
         )
@@ -15,7 +15,7 @@ public:
         // Constructor code if needed
     }
 
-    unsigned char speed;
+    float speed;
     unsigned char aggressiveness;
     unsigned char reproduction_rate;
 

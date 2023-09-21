@@ -31,7 +31,7 @@ private:
 
 public:
 
-    Host(unsigned char initialSpeed,
+    Host(float initialSpeed,
         unsigned char initialAggressiveness,
         unsigned char initialReproductionRate)
 
@@ -45,6 +45,11 @@ public:
 
     void show_characteristics(void);
     void show_host(void);
+
+    void move_up(void);
+    void move_right(void);
+    void move_down(void);
+    void move_left(void);
 
 };
 

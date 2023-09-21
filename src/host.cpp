@@ -4,7 +4,6 @@
     #include <GL/glut.h>
 #endif
 
-
 #include <stdio.h>
 #include "host.h"
 
@@ -12,6 +11,7 @@ void Host::change_position(float new_x, float new_y){
     this->pos.x = new_x;
     this->pos.y = new_y;
 }
+
 void Host::change_shape(float new_h, float new_w){
     this->shape.h = new_h;
     this->shape.w = new_w;
@@ -43,10 +43,26 @@ void Host::show_host(void){
     glBegin(GL_POLYGON);// Fala para o OpenGL que os próximos pontos serão para desenhar um polígono
 
     // Adicionada cada vértice do retângulo
-    glVertex2d( this->pos.x-this->shape.w/2, this->pos.y-this->shape.h/2);
-    glVertex2d( this->pos.x-this->shape.w/2, this->pos.y+this->shape.h/2);
-    glVertex2d( this->pos.x+this->shape.w/2, this->pos.y+this->shape.h/2);
-    glVertex2d( this->pos.x+this->shape.w/2, this->pos.y-this->shape.h/2);
+    glVertex2d(this->pos.x-this->shape.w/2, this->pos.y-this->shape.h/2);
+    glVertex2d(this->pos.x-this->shape.w/2, this->pos.y+this->shape.h/2);
+    glVertex2d(this->pos.x+this->shape.w/2, this->pos.y+this->shape.h/2);
+    glVertex2d(this->pos.x+this->shape.w/2, this->pos.y-this->shape.h/2);
 
     glEnd();// Fala para o OpenGL que terminou de enviar os vértices do polígono
+}
+
+void Host::move_up(void){
+    this->pos.y += this->speed;
+}
+
+void Host::move_right(void){
+    this->pos.x += this->speed;
+}
+
+void Host::move_down(void){
+    this->pos.y -= this->speed;
+}
+
+void Host::move_left(void){
+    this->pos.x -= this->speed;
 }

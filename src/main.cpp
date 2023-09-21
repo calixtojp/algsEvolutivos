@@ -16,23 +16,30 @@
 #define MAX_HOSTS 5
 
 //declaring used namespaces
-using namespace std;
+using std::vector;
 
+//Draw funcition
 void draw();
-void circle(float x, float y, float radius);
-void retangle(float x, float y, float w, float h);
 
-Host *Pijas[5];
-int n_hosts = 0;
+//Animator function
+void timer(int);
+
+vector <Host*> Hostes;
 
 int main(int argc, char** argv){
 
-    Host Maria(10, 20, 30);
+    Host Maria(0.002, 20, 30);
     Maria.change_position(0.5, 0);
     Maria.chage_color(0, 1, 0);//Maria vai ser verde
     Maria.change_shape(0.2, 0.2);
-    Pijas[0] = &Maria;
-    n_hosts++;
+
+    Host Jose(0.003, 10, 30);
+    Jose.change_position(0, 0.7);
+    Jose.chage_color(1, 0, 0);//Jose vai ser vermelho
+    Jose.change_shape(0.1, 0.1);
+
+    Hostes.push_back(&Maria);
+    Hostes.push_back(&Jose);
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB);
@@ -41,6 +48,7 @@ int main(int argc, char** argv){
     glutCreateWindow("Testando OpenGL");
     glClearColor(1.0, 1.0, 1.0, 1.0);// Limpa a tela (red, green, blue, alpha)
     glutDisplayFunc(draw);// Define qual função irá desenhar
+    glutTimerFunc(0, timer, 0);// Define qual será a função de loop
     glutMainLoop();
 
     return 0;
@@ -55,45 +63,37 @@ void draw(){
     // Coordenada (-1 1) é o canto superior esquerdo
     // Coordenada (0 0) é o centro da tela
 
-    for(int i = 0; i < n_hosts; ++i){
-      Host temp = *(Pijas[i]);
-      temp.show_host();
+    for(auto &it : Hostes ){
+        // Host temp = *it;
+        // temp.show_host();
+        it->show_host();
     }
-    // Maria.show_host();
+
+    // Host temp = *(Hostes[0]);//desenha só Maria
+    // temp.show_host();
 
     // retangle(0, 0, 0.1, 0.1);
 
     // triangle(0.5, 0.5, 0.4, 0.5);
-    circle(-0.5, 0.5, 0.03);
+    // circle(-0.5, 0.5, 0.03);
     //   strangePolygon(-0.5, -0.5);
     //   anotherStrangePolygon(0.5, -0.5);
 
     glutSwapBuffers();
 }
 
-void circle(float x, float y, float radius){
-    // Um circulo é desenhado como um polígono de muitos pontos
+void timer(int){
 
-    glColor3f(0, 0, 1);// Define que será desenhar um objeto azul
-    glBegin(GL_POLYGON);
-    for (int i = 0; i < 360; i+=5) {
-      // Adicionada cada vértice 2D do circulo
-      glVertex2d( radius*cos(i/180.0*M_PI) + x, radius*sin(i/180.0*M_PI) + y);
-    }
-    glEnd();
-}
+    Hostes[0]->move_up();
+    Hostes[1]->move_down();
+    // Temp->move_right();
+    // Temp->move_down();
+    // Temp->move_left();
 
-void retangle(float x, float y, float w, float h){
-    // Vai desenhar um polígono de 4 vértices
+    // Executa a função draw para desenhar novamente
+    glutPostRedisplay();
 
-    glColor3f(0, 0, 1);// Define que será desenhar um objeto azul
-    glBegin(GL_POLYGON);// Fala para o OpenGL que os próximos pontos serão para desenhar um polígono
-
-    // Adicionada cada vértice do retângulo
-    glVertex2d( x-w/2, y-h/2);
-    glVertex2d( x-w/2, y+h/2);
-    glVertex2d( x+w/2, y+h/2);
-    glVertex2d( x+w/2, y-h/2);
-
-    glEnd();// Fala para o OpenGL que terminou de enviar os vértices do polígono
+    // O primeiro parâmetro define de quanto em quanto tempo em milissegundos timer será chaamdo
+    // Eu coloquei 1000/60 para definir que vai atualizar a 60hz
+    glutTimerFunc(1000/60, timer, 0);// Garante que esta função será chamada de novo
 }
