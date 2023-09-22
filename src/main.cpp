@@ -13,7 +13,8 @@
 
 #define windowWidth 700
 #define windowHeight 700
-#define MAX_HOSTS 5
+
+#define POPULATION_SIZE 5
 
 //declaring used namespaces
 using std::vector;
@@ -30,16 +31,18 @@ int main(int argc, char** argv){
 
     Host Maria(0.005, 20, 30);
     Maria.change_position(0.5, 0);
-    Maria.chage_color(0, 1, 0);//Maria vai ser verde
+    Maria.change_color(0, 1, 0);//Maria vai ser verde
     Maria.change_shape(0.2, 0.2);
 
     Host Jose(0.003, 10, 30);
     Jose.change_position(0, 0.7);
-    Jose.chage_color(1, 0, 0);//Jose vai ser vermelho
+    Jose.change_color(1, 0, 0);//Jose vai ser vermelho
     Jose.change_shape(0.1, 0.1);
 
     Hostes.push_back(&Maria);
     Hostes.push_back(&Jose);
+
+    create_initial_population(Hostes, POPULATION_SIZE);
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB);
@@ -63,10 +66,15 @@ void draw(){
     // Coordenada (-1 1) é o canto superior esquerdo
     // Coordenada (0 0) é o centro da tela
 
-    for(auto &it : Hostes ){
-        // Host temp = *it;
-        // temp.show_host();
+    int cont = 0;
+    for(auto it : Hostes ){
+        printf("cont: %d\n", cont);
+
         it->show_host();
+        // it->show_characteristics();
+
+
+        ++cont;
     }
 
     // Host temp = *(Hostes[0]);//desenha só Maria

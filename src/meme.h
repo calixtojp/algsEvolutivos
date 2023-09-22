@@ -5,8 +5,8 @@ class Meme {
 public:
 
     Meme(float initialSpeed,
-        unsigned char initialAggressiveness,
-        unsigned char initialReproductionRate
+        float initialAggressiveness,
+        float initialReproductionRate
         )
         :
         speed(initialSpeed),
@@ -16,8 +16,8 @@ public:
     }
 
     float speed;
-    unsigned char aggressiveness;
-    unsigned char reproduction_rate;
+    float aggressiveness;
+    float reproduction_rate;
 
 };
 

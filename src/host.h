@@ -4,7 +4,11 @@
 #define HOST_H
 
 #include <stdio.h>
+#include <random>//used to generate random numbers
+#include <bits/stdc++.h>//used to manipulate vector
 #include "meme.h"
+
+using std::vector;
 
 typedef struct position{
     float x;
@@ -22,6 +26,8 @@ typedef struct shape{
     float w;//width
 }shape_t;
 
+
+
 class Host : public Meme {
 private:
 
@@ -32,8 +38,8 @@ private:
 public:
 
     Host(float initialSpeed,
-        unsigned char initialAggressiveness,
-        unsigned char initialReproductionRate)
+        float initialAggressiveness,
+        float initialReproductionRate)
 
         : Meme(initialSpeed, initialAggressiveness, initialReproductionRate) {
         // Constructor code for the Host class if needed
@@ -41,7 +47,7 @@ public:
 
     void change_position(float new_x, float new_y);
     void change_shape(float new_h, float new_w);
-    void chage_color(float new_R, float new_G, float new_B);
+    void change_color(float new_R, float new_G, float new_B);
 
     //Show position, color and shape (terminal)
     void show_characteristics(void);
@@ -54,6 +60,11 @@ public:
     void move_down(void);
     void move_left(void);
 
+
+
 };
+
+void create_initial_population(vector <Host*> &Hostes, int hostes_qtd);
+
 
 #endif // HOST_H
