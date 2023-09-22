@@ -28,7 +28,7 @@ vector <Host*> Hostes;
 
 int main(int argc, char** argv){
 
-    Host Maria(0.002, 20, 30);
+    Host Maria(0.005, 20, 30);
     Maria.change_position(0.5, 0);
     Maria.chage_color(0, 1, 0);//Maria vai ser verde
     Maria.change_shape(0.2, 0.2);
@@ -84,11 +84,13 @@ void draw(){
 
 void timer(int){
 
+    //movendo a Maria pro canto superior direito
     Hostes[0]->move_up();
-    Hostes[1]->move_down();
-    // Temp->move_right();
-    // Temp->move_down();
-    // Temp->move_left();
+    // Hostes[0]->move_right();
+
+    // //Movendo Jose pro cando inferior esquerdo
+    // Hostes[1]->move_down();
+    // Hostes[1]->move_left();
 
     // Executa a função draw para desenhar novamente
     glutPostRedisplay();

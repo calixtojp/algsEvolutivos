@@ -43,9 +43,12 @@ public:
     void change_shape(float new_h, float new_w);
     void chage_color(float new_R, float new_G, float new_B);
 
+    //Show position, color and shape (terminal)
     void show_characteristics(void);
+    //Display the host with openGL
     void show_host(void);
 
+    //Movement functions 
     void move_up(void);
     void move_right(void);
     void move_down(void);
