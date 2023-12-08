@@ -15,7 +15,7 @@
 #define windowWidth 700
 #define windowHeight 700
 
-#define POPULATION_SIZE 5
+#define POPULATION_SIZE 10
 
 //declaring used namespaces
 using std::vector;

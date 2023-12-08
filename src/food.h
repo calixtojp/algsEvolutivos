@@ -10,10 +10,12 @@ private:
     float y;
     float width;
     float height;
+    int foodTimer;
 
 public:
+
     Food(float initialX, float initialY)
-        : x(initialX), y(initialY), width(0.05f), height(0.05f) {
+        : x(initialX), y(initialY), width(0.05f), height(0.05f), foodTimer(500) {
         // Constructor code if needed
     }
 
@@ -22,11 +24,25 @@ public:
     float getY() const { return y; }
     float getWidth() const { return width; }
     float getHeight() const { return height; }
+    int getTimer() const {return foodTimer; }
 
     // Setters
     void setPosition(float newX, float newY) {
         x = newX;
         y = newY;
+    }
+
+    void randPosition(){
+        x = generate_random(-1, 1);
+        y = generate_random(-1, 1);
+    }
+
+    void setTimer(int newT){
+        foodTimer = newT;
+    }
+
+    void decreaseTimer(){
+        foodTimer--;
     }
 
     // Display the food with OpenGL

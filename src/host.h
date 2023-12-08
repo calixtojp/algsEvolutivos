@@ -48,7 +48,7 @@ public:
         float initialAggressiveness,
         float initialReproductionRate)
 
-        : Meme(initialSpeed, initialAggressiveness, initialReproductionRate) {
+        : Meme(initialSpeed, initialAggressiveness, initialReproductionRate), currentFood(nullptr) {
         // Constructor code for the Host class if needed
     }
 

@@ -102,15 +102,15 @@ void Host::interact_with_food(std::vector<Food>& foods) {
         // Decrement the timer
         eatingTimer--;
 
+        //currentFood->setTimer(eatingTimer); // Why this is segfault
+
         if (eatingTimer <= 0) {
             // Eating time is over, remove the consumed food
             isEating = false;
 
-            // Remove the consumed food from the vector using std::find
-            auto removeIt = std::find(foods.begin(), foods.end(), *currentFood);
-            if (removeIt != foods.end()) {
-                foods.erase(removeIt);
-            }
+            currentFood->setTimer(500); // While this is not?
+            currentFood->randPosition();
+
 
             // Optionally, you can reset the timer or perform other actions
         }
@@ -131,10 +131,11 @@ void Host::interact_with_food(std::vector<Food>& foods) {
                 // The host is in contact with the food
                 // Perform the eating action
                 isEating = true;
-                eatingTimer = 100; // Set a timer (adjust as needed)
-
+                
                 // Store the currently interacting food
                 currentFood = &food;
+
+                eatingTimer = currentFood->getTimer(); // Set a timer (adjust as needed)
 
                 // Optionally, you can do more, such as increasing a score, etc.
             }
