@@ -73,19 +73,9 @@ void Host::move_left(void){
     this->pos.x = this->pos.x>1 ? -1 : this->pos.x;
 }
 
-float generate_random(float lower, float upper) {
-    // Initialize a random number generator engine
-    std::random_device rd;  // Seed the random number generator
-    std::mt19937 gen(rd()); // Use the Mersenne Twister engine
-    std::uniform_real_distribution<float> distribution(lower, upper);
-
-    // Generate and return a random float in the specified range
-    return distribution(gen);
-}
-
 void create_initial_population(vector <Host*> &Hosts, int hosts_qty) {
      for (int i = 0; i < hosts_qty; ++i) {
-         float speed = generate_random(0, 1);
+         float speed = generate_random(0, 0.01);
          float aggressiveness = generate_random(0, 1);
          float reproductionrate = generate_random(0, 1);
          float pos_x = generate_random(-1, 1);
@@ -104,4 +94,50 @@ void create_initial_population(vector <Host*> &Hosts, int hosts_qty) {
          // Store the pointer to the dynamically allocated object in the vector
          Hosts.push_back(temp);
      }
+}
+
+void Host::interact_with_food(std::vector<Food>& foods) {
+    // Check if the host is already eating
+    if (isEating) {
+        // Decrement the timer
+        eatingTimer--;
+
+        if (eatingTimer <= 0) {
+            // Eating time is over, remove the consumed food
+            isEating = false;
+
+            // Remove the consumed food from the vector using std::find
+            auto removeIt = std::find(foods.begin(), foods.end(), *currentFood);
+            if (removeIt != foods.end()) {
+                foods.erase(removeIt);
+            }
+
+            // Optionally, you can reset the timer or perform other actions
+        }
+    } else {
+        // Iterate through all foods to check for interaction
+        for (auto& food : foods) {
+            float food_x = food.getX();
+            float food_y = food.getY();
+            float food_width = food.getWidth();
+            float food_height = food.getHeight();
+
+            // Check if the host is in contact with the food
+            if (pos.x - shape.w / 2 < food_x + food_width / 2 &&
+                pos.x + shape.w / 2 > food_x - food_width / 2 &&
+                pos.y - shape.h / 2 < food_y + food_height / 2 &&
+                pos.y + shape.h / 2 > food_y - food_height / 2) {
+                
+                // The host is in contact with the food
+                // Perform the eating action
+                isEating = true;
+                eatingTimer = 100; // Set a timer (adjust as needed)
+
+                // Store the currently interacting food
+                currentFood = &food;
+
+                // Optionally, you can do more, such as increasing a score, etc.
+            }
+        }
+    }
 }
