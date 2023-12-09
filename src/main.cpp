@@ -79,7 +79,7 @@ void draw(){
         it->interact_with_food(Foods);
 
         // Update host state (including movement) based on the eating mechanic
-        if(!(it->isEating)) it->move_up();
+        if(!(it->isEating)) it->move_left();
     }
 
     // Display the food

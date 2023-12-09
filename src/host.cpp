@@ -55,22 +55,38 @@ void Host::show_host(void){
 
 void Host::move_up(void){
     this->pos.y += this->speed;
-    this->pos.y = this->pos.y>1 ? -1 : this->pos.y;
+    if(this->pos.y > 1){
+        this->pos.y = -1;
+        this->pos.x = generate_random(-1, 1);
+    }
+    //this->pos.y = this->pos.y>1 ? -1 : this->pos.y;
 }
 
 void Host::move_right(void){
     this->pos.x += this->speed;
-    this->pos.x = this->pos.x>1 ? -1 : this->pos.x;
+    if(this->pos.x > 1){
+        this->pos.x = -1;
+        this->pos.y = generate_random(-1, 1);
+    }
+    //this->pos.x = this->pos.x>1 ? -1 : this->pos.x;
 }
 
 void Host::move_down(void){
     this->pos.y -= this->speed;
-    this->pos.y = this->pos.y>1 ? -1 : this->pos.y;
+    if(this->pos.y < -1){
+        this->pos.y = 1;
+        this->pos.x = generate_random(-1, 1);
+    }
+    //this->pos.y = this->pos.y<-1 ? 1 : this->pos.y;
 }
 
 void Host::move_left(void){
     this->pos.x -= this->speed;
-    this->pos.x = this->pos.x>1 ? -1 : this->pos.x;
+    if(this->pos.x < -1){
+        this->pos.x = 1;
+        this->pos.y = generate_random(-1, 1);
+    }
+    //this->pos.x = this->pos.x<-1 ? 1 : this->pos.x;
 }
 
 void create_initial_population(vector <Host*> &Hosts, int hosts_qty) {
@@ -102,13 +118,13 @@ void Host::interact_with_food(std::vector<Food>& foods) {
         // Decrement the timer
         eatingTimer--;
 
-        //currentFood->setTimer(eatingTimer); // Why this is segfault
+        //currentFood->setTimer(eatingTimer); // Why this is segfault?
 
         if (eatingTimer <= 0) {
             // Eating time is over, remove the consumed food
             isEating = false;
 
-            currentFood->setTimer(500); // While this is not?
+            currentFood->setTimer(500);
             currentFood->randPosition();
 
 
