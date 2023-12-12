@@ -14,8 +14,9 @@ void Host::change_position(float new_x, float new_y){
     this->pos.y = new_y;
 }
 
-void Host::change_size(float new_size){
-    this->size = new_size;
+void Host::change_shape(float new_h, float new_w){
+    this->shape.h = new_h;
+    this->shape.w = new_w;
 }
 
 void Host::change_color(float new_R, float new_G, float new_B){
@@ -25,10 +26,11 @@ void Host::change_color(float new_R, float new_G, float new_B){
 }
 
 void Host::show_characteristics(){
-    printf("x:%.2f|y:%.2f|size:%.2f|RGB(%.2f,%.2f,%.2f)\n",
+    printf("x:%.2f|y:%.2f|h:%.2f|w:%.2f|RGB(%.2f,%.2f,%.2f)\n",
         this->pos.x,
         this->pos.y,
-        this->size,
+        this->shape.h,
+        this->shape.w,
         this->color.R,
         this->color.G,
         this->color.B
@@ -43,10 +45,10 @@ void Host::show_host(void){
     glBegin(GL_POLYGON);// Fala para o OpenGL que os próximos pontos serão para desenhar um polígono
 
     // Adicionada cada vértice do retângulo
-    glVertex2d(this->pos.x-this->size/2, this->pos.y-this->size/2);
-    glVertex2d(this->pos.x-this->size/2, this->pos.y+this->size/2);
-    glVertex2d(this->pos.x+this->size/2, this->pos.y+this->size/2);
-    glVertex2d(this->pos.x+this->size/2, this->pos.y-this->size/2);
+    glVertex2d(this->pos.x-this->shape.w/2, this->pos.y-this->shape.h/2);
+    glVertex2d(this->pos.x-this->shape.w/2, this->pos.y+this->shape.h/2);
+    glVertex2d(this->pos.x+this->shape.w/2, this->pos.y+this->shape.h/2);
+    glVertex2d(this->pos.x+this->shape.w/2, this->pos.y-this->shape.h/2);
 
     glEnd();// Fala para o OpenGL que terminou de enviar os vértices do polígono
 }
@@ -87,32 +89,27 @@ void Host::move_left(void){
     //this->pos.x = this->pos.x<-1 ? 1 : this->pos.x;
 }
 
-// Function to create a single Host object
-Host* create_host() {
-    float speed = generate_random(0, 1);
-    float aggressiveness = generate_random(0, 1);
-    float reproductionrate = generate_random(0, 1);
-    float pos_x = generate_random(-1, 1);
-    float pos_y = generate_random(-1, 1);
-    float shape = generate_random(0.1, 0.2);
+void create_initial_population(vector <Host*> &Hosts, int hosts_qty) {
+     for (int i = 0; i < hosts_qty; ++i) {
+         float speed = generate_random(0, 0.01);
+         float aggressiveness = generate_random(0, 1);
+         float reproductionrate = generate_random(0, 1);
+         float pos_x = generate_random(-1, 1);
+         float pos_y = generate_random(-1, 1);
+         float shape = generate_random(0.1, 0.2);
 
-    // Dynamically allocate memory for the Host object
-    Host* host = new Host(speed, aggressiveness, reproductionrate);
+         // Dynamically allocate memory for the Host object
+         Host* temp = new Host(speed, aggressiveness, reproductionrate);
 
-    host->change_position(pos_x, pos_y);
-    host->change_color(0, 0, 1);
-    // host->change_shape(shape, shape);
+         temp->change_position(pos_x, pos_y);
+         temp->change_color(0, 0, 1);
+         temp->change_shape(shape, shape);
 
-    host->show_characteristics();
+         temp->show_characteristics();
 
-    return host;
-}
-
-void create_initial_population(vector<Host*> &Hosts, int hosts_qty) {
-    for (int i = 0; i < hosts_qty; ++i) {
-        Host* temp = create_host();
-        Hosts.push_back(temp);
-    }
+         // Store the pointer to the dynamically allocated object in the vector
+         Hosts.push_back(temp);
+     }
 }
 
 void Host::interact_with_food(std::vector<Food>& foods) {

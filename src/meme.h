@@ -6,23 +6,19 @@ public:
 
     Meme(float initialSpeed,
         float initialAggressiveness,
-        float initialReproductionRate,
-        float initialSize
+        float initialReproductionRate
         )
         :
         speed(initialSpeed),
         aggressiveness(initialAggressiveness),
-        reproduction_rate(initialReproductionRate),
-        size(initialSize){
+        reproduction_rate(initialReproductionRate) {
         // Constructor code if needed
     }
 
-    float energy;
     float speed;
     float aggressiveness;
     float reproduction_rate;
-    float size;
 
 };
 
-#endif
+#endif // MYCLASS_H
