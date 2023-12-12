@@ -53,60 +53,111 @@ void Host::show_host(void){
 
 void Host::move_up(void){
     this->pos.y += this->speed;
-    this->pos.y = this->pos.y>1 ? -1 : this->pos.y;
+    if(this->pos.y > 1){
+        this->pos.y = -1;
+        this->pos.x = generate_random(-1, 1);
+    }
+    //this->pos.y = this->pos.y>1 ? -1 : this->pos.y;
 }
 
 void Host::move_right(void){
     this->pos.x += this->speed;
-    this->pos.x = this->pos.x>1 ? -1 : this->pos.x;
+    if(this->pos.x > 1){
+        this->pos.x = -1;
+        this->pos.y = generate_random(-1, 1);
+    }
+    //this->pos.x = this->pos.x>1 ? -1 : this->pos.x;
 }
 
 void Host::move_down(void){
     this->pos.y -= this->speed;
-    this->pos.y = this->pos.y>1 ? -1 : this->pos.y;
+    if(this->pos.y < -1){
+        this->pos.y = 1;
+        this->pos.x = generate_random(-1, 1);
+    }
+    //this->pos.y = this->pos.y<-1 ? 1 : this->pos.y;
 }
 
 void Host::move_left(void){
     this->pos.x -= this->speed;
-    this->pos.x = this->pos.x>1 ? -1 : this->pos.x;
-}
-
-float generate_random(float lower, float upper) {
-    // Initialize a random number generator engine
-    std::random_device rd;  // Seed the random number generator
-    std::mt19937 gen(rd()); // Use the Mersenne Twister engine
-    std::uniform_real_distribution<float> distribution(lower, upper);
-
-    // Generate and return a random float in the specified range
-    return distribution(gen);
+    if(this->pos.x < -1){
+        this->pos.x = 1;
+        this->pos.y = generate_random(-1, 1);
+    }
+    //this->pos.x = this->pos.x<-1 ? 1 : this->pos.x;
 }
 
 // Function to create a single Host object
 Host* create_host() {
-    float reproductionrate = generate_random(0, 1);
     float speed = generate_random(0, 1);
-    float size = generate_random(0.1, 0.2);
-
-    
     float aggressiveness = generate_random(0, 1);
+    float reproductionrate = generate_random(0, 1);
     float pos_x = generate_random(-1, 1);
     float pos_y = generate_random(-1, 1);
+    float shape = generate_random(0.1, 0.2);
 
     // Dynamically allocate memory for the Host object
-    Host* temp = new Host(speed, aggressiveness, reproductionrate, size);
+    Host* host = new Host(speed, aggressiveness, reproductionrate);
 
-    temp->change_position(pos_x, pos_y);
-    temp->change_color(0, 0, 1);
-    temp->change_size(size);
+    host->change_position(pos_x, pos_y);
+    host->change_color(0, 0, 1);
+    // host->change_shape(shape, shape);
 
-    temp->show_characteristics();
+    host->show_characteristics();
 
-    return temp;
+    return host;
 }
 
 void create_initial_population(vector<Host*> &Hosts, int hosts_qty) {
     for (int i = 0; i < hosts_qty; ++i) {
         Host* temp = create_host();
         Hosts.push_back(temp);
+    }
+}
+
+void Host::interact_with_food(std::vector<Food>& foods) {
+    // Check if the host is already eating
+    if (isEating) {
+        // Decrement the timer
+        eatingTimer--;
+
+        //currentFood->setTimer(eatingTimer); // Why this is segfault?
+
+        if (eatingTimer <= 0) {
+            // Eating time is over, remove the consumed food
+            isEating = false;
+
+            currentFood->setTimer(500);
+            currentFood->randPosition();
+
+
+            // Optionally, you can reset the timer or perform other actions
+        }
+    } else {
+        // Iterate through all foods to check for interaction
+        for (auto& food : foods) {
+            float food_x = food.getX();
+            float food_y = food.getY();
+            float food_width = food.getWidth();
+            float food_height = food.getHeight();
+
+            // Check if the host is in contact with the food
+            if (pos.x - shape.w / 2 < food_x + food_width / 2 &&
+                pos.x + shape.w / 2 > food_x - food_width / 2 &&
+                pos.y - shape.h / 2 < food_y + food_height / 2 &&
+                pos.y + shape.h / 2 > food_y - food_height / 2) {
+                
+                // The host is in contact with the food
+                // Perform the eating action
+                isEating = true;
+                
+                // Store the currently interacting food
+                currentFood = &food;
+
+                eatingTimer = currentFood->getTimer(); // Set a timer (adjust as needed)
+
+                // Optionally, you can do more, such as increasing a score, etc.
+            }
+        }
     }
 }

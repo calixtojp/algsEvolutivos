@@ -10,11 +10,12 @@
 
 //created libraries
 #include "host.h"
+#include "food.h"
 
 #define windowWidth 700
 #define windowHeight 700
 
-#define POPULATION_SIZE 5
+#define POPULATION_SIZE 10
 
 //declaring used namespaces
 using std::vector;
@@ -26,6 +27,8 @@ void draw();
 void timer(int);
 
 vector <Host*> Hostes;
+
+vector <Food> Foods;
 
 int main(int argc, char** argv){
 
@@ -44,6 +47,8 @@ int main(int argc, char** argv){
 
 
     create_initial_population(Hostes, POPULATION_SIZE);
+
+    create_food_population(Foods, POPULATION_SIZE);
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB);
@@ -67,15 +72,20 @@ void draw(){
     // Coordenada (-1 1) é o canto superior esquerdo
     // Coordenada (0 0) é o centro da tela
 
-    int cont = 0;
-    for(auto it : Hostes ){
-        printf("cont: %d\n", cont);
-
+    // Display the hosts
+    for (auto it : Hostes) {
         it->show_host();
-        // it->show_characteristics();
 
+        // Check food interactions for each host
+        it->interact_with_food(Foods);
 
-        ++cont;
+        // Update host state (including movement) based on the eating mechanic
+        if(!(it->isEating)) it->move_left();
+    }
+
+    // Display the food
+    for (const auto& food : Foods) {
+        food.show_food();
     }
 
     // Host temp = *(Hostes[0]);//desenha só Maria
@@ -96,15 +106,6 @@ void print(void){
 }
 
 void timer(int){
-
-    //movendo a Maria pro canto superior direito
-    Hostes[0]->move_up();
-    // Hostes[0]->move_right();
-
-    // //Movendo Jose pro cando inferior esquerdo
-    // Hostes[1]->move_down();
-    // Hostes[1]->move_left();
-
     // Executa a função draw para desenhar novamente
     glutPostRedisplay();
 

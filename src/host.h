@@ -4,9 +4,10 @@
 #define HOST_H
 
 #include <stdio.h>
-#include <random>//used to generate random numbers
+#include "utils.h"
 #include <bits/stdc++.h>//used to manipulate vector
 #include "meme.h"
+#include "food.h"
 
 using std::vector;
 
@@ -27,14 +28,20 @@ private:
     position_t pos;
     RGB_t color;
 
+    // Keep track of the currently interacting food
+    Food* currentFood;
+
 public:
+
+    bool isEating;
+    int eatingTimer;
 
     Host(float initialSpeed,
         float initialAggressiveness,
         float initialReproductionRate,
         float initialSize)
 
-        : Meme(initialSpeed, initialAggressiveness, initialReproductionRate, initialSize) {
+        : Meme(initialSpeed, initialAggressiveness, initialReproductionRate), currentFood(nullptr) {
         // Constructor code for the Host class if needed
     }
 
@@ -52,6 +59,9 @@ public:
     void move_right(void);
     void move_down(void);
     void move_left(void);
+
+    //Handling food interactions
+    void interact_with_food(std::vector<Food>& foods);
 
 };
 
