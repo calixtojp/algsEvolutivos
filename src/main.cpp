@@ -29,18 +29,19 @@ vector <Host*> Hostes;
 
 int main(int argc, char** argv){
 
-    Host Maria(0.005, 20, 30);
+    Host Maria(0.005, 20, 30, 0.2);
     Maria.change_position(0.5, 0);
     Maria.change_color(0, 1, 0);//Maria vai ser verde
-    Maria.change_shape(0.2, 0.2);
+    Maria.change_size(0.2);
 
-    Host Jose(0.003, 10, 30);
+    Host Jose(0.003, 10, 30, 0.2);
     Jose.change_position(0, 0.7);
     Jose.change_color(1, 0, 0);//Jose vai ser vermelho
-    Jose.change_shape(0.1, 0.1);
+    Jose.change_size(0.1);
 
     Hostes.push_back(&Maria);
     Hostes.push_back(&Jose);
+
 
     create_initial_population(Hostes, POPULATION_SIZE);
 
@@ -88,6 +89,10 @@ void draw(){
     //   anotherStrangePolygon(0.5, -0.5);
 
     glutSwapBuffers();
+}
+
+void print(void){
+
 }
 
 void timer(int){

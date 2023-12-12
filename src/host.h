@@ -21,32 +21,25 @@ typedef struct RGB{
     float B;
 }RGB_t;
 
-typedef struct shape{
-    float h;//hight
-    float w;//width
-}shape_t;
-
-
-
 class Host : public Meme {
 private:
 
     position_t pos;
-    shape_t shape;
     RGB_t color;
 
 public:
 
     Host(float initialSpeed,
         float initialAggressiveness,
-        float initialReproductionRate)
+        float initialReproductionRate,
+        float initialSize)
 
-        : Meme(initialSpeed, initialAggressiveness, initialReproductionRate) {
+        : Meme(initialSpeed, initialAggressiveness, initialReproductionRate, initialSize) {
         // Constructor code for the Host class if needed
     }
 
     void change_position(float new_x, float new_y);
-    void change_shape(float new_h, float new_w);
+    void change_size(float new_size);
     void change_color(float new_R, float new_G, float new_B);
 
     //Show position, color and shape (terminal)
@@ -60,11 +53,9 @@ public:
     void move_down(void);
     void move_left(void);
 
-
-
 };
 
-void create_initial_population(vector <Host*> &Hostes, int hostes_qtd);
+void create_initial_population(vector<Host*>& Hosts, int hosts_qty);
 
 
 #endif // HOST_H
