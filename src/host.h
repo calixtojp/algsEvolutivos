@@ -9,6 +9,9 @@
 #include "meme.h"
 #include "food.h"
 
+#define MAX_ENERGY 100
+#define ENERGY_LOSS_PER_TICK 0.1
+
 using std::vector;
 
 typedef struct position{
@@ -38,11 +41,13 @@ private:
 
     // Keep track of the currently interacting food
     Food* currentFood;
+    float energy;
 
 public:
 
     bool isEating;
     int eatingTimer;
+    bool is_alive;
 
     Host(float initialSpeed,
         float initialAggressiveness,
@@ -50,6 +55,8 @@ public:
 
         : Meme(initialSpeed, initialAggressiveness, initialReproductionRate), currentFood(nullptr) {
         // Constructor code for the Host class if needed
+        this->is_alive = true;
+        this->energy = MAX_ENERGY / 2;
     }
 
     void change_position(float new_x, float new_y);
@@ -70,6 +77,10 @@ public:
     //Handling food interactions
     void interact_with_food(std::vector<Food>& foods);
 
+    void update(std::vector<Food>& foods);
+    void increase_energy(Food *food);
+    void decrease_energy();
+    void kill_host_if_energy_is_zero();
 };
 
 void create_initial_population(vector <Host*> &Hostes, int hostes_qtd);

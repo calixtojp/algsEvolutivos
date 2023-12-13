@@ -73,13 +73,7 @@ void draw(){
 
     // Display the hosts
     for (auto it : Hostes) {
-        it->show_host();
-
-        // Check food interactions for each host
-        it->interact_with_food(Foods);
-
-        // Update host state (including movement) based on the eating mechanic
-        if(!(it->isEating)) it->move_left();
+        it->update(Foods);
     }
 
     // Display the food

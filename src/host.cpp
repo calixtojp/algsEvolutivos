@@ -132,6 +132,9 @@ void Host::interact_with_food(std::vector<Food>& foods) {
         // Decrement the timer
         eatingTimer--;
 
+        // increase hosts's energy while eating
+        this->increase_energy(currentFood);
+
         //currentFood->setTimer(eatingTimer); // Why this is segfault?
 
         if (eatingTimer <= 0) {
@@ -171,4 +174,37 @@ void Host::interact_with_food(std::vector<Food>& foods) {
             }
         }
     }
+}
+
+void Host::increase_energy(Food *food) {
+    if(food == NULL) return;
+
+    if(this->energy + food->getEnergyPerUnit() < MAX_ENERGY)
+        this->energy += food->getEnergyPerUnit();
+}
+
+void Host::kill_host_if_energy_is_zero() {
+    if(this->energy <= 0 && this->is_alive) {
+        std::cout << "running low on energy: killing host :(\n";
+        this->is_alive = false;
+    }
+}
+
+void Host::decrease_energy() {
+    this->energy -= ENERGY_LOSS_PER_TICK;
+}
+
+void Host::update(std::vector<Food>& foods) {
+    this->decrease_energy();
+    this->kill_host_if_energy_is_zero();
+    
+    if(!this->is_alive) return;
+
+    this->show_host();
+
+    // Check food interactions for each host
+    this->interact_with_food(foods);
+    
+    // Update host state (including movement) based on the eating mechanic
+    if(!(this->isEating)) this->move_left();
 }
