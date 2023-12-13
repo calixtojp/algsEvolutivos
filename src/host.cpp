@@ -234,10 +234,12 @@ void Host::mutate() {
 
 float Host::mutate_color(float color_value) {
     int factor = 1;
+    float color;
     if(coin_toss()) {
         factor = -1;
     }
-    return abs(color_value + factor * MUTATION_ADDITIVE_MODIFIER);
+    color = abs(color_value + factor * MUTATION_ADDITIVE_MODIFIER);
+    return color > 1 ? color - 1 : color;
 }
 
 bool Host::coin_toss() {
