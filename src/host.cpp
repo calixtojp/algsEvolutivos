@@ -133,21 +133,18 @@ void Host::interact_with_food(std::vector<Food>& foods) {
     // Check if the host is already eating
     if (isEating) {
         // Decrement the timer
-        eatingTimer--;
+        //eatingTimer--;
+        if (currentFood != NULL)
+            currentFood->decreaseTimer();
 
         // increase hosts's energy while eating
         this->increase_energy(currentFood);
 
         //currentFood->setTimer(eatingTimer); // Why this is segfault?
 
-        if (eatingTimer <= 0) {
+        if (currentFood != NULL && currentFood->getTimer() <= 0) {
             // Eating time is over, remove the consumed food
             isEating = false;
-
-            currentFood->setTimer(500);
-            currentFood->randPosition();
-
-
             // Optionally, you can reset the timer or perform other actions
         }
     } else {
@@ -167,11 +164,11 @@ void Host::interact_with_food(std::vector<Food>& foods) {
                 // The host is in contact with the food
                 // Perform the eating action
                 isEating = true;
-                
+                food.registerHost(this);
                 // Store the currently interacting food
                 currentFood = &food;
 
-                eatingTimer = currentFood->getTimer(); // Set a timer (adjust as needed)
+                //eatingTimer = currentFood->getTimer(); // Set a timer (adjust as needed)
 
                 // Optionally, you can do more, such as increasing a score, etc.
             }
@@ -207,7 +204,10 @@ void Host::update(std::vector<Food>& foods) {
 
     // Check food interactions for each host
     this->interact_with_food(foods);
-    
+
+    if(this->currentFood != NULL)
+        this->currentFood->update();
+
     // Update host state (including movement) based on the eating mechanic
     if(!(this->isEating)) this->move_left();
 }

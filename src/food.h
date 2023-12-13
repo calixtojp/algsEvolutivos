@@ -5,6 +5,7 @@
 #include "utils.h"
 
 #define ENERGY_PER_FOOD_UNIT 0.5
+class Host;
 
 class Food {
     
@@ -16,6 +17,7 @@ private:
     int foodTimer;
     float energy_per_unit;
 
+    std::vector<Host*> eatingHosts;
 public:
 
     Food(float initialX, float initialY)
@@ -50,6 +52,10 @@ public:
 
     // Display the food with OpenGL
     void show_food() const ;
+
+    void update();
+    void registerHost(Host* host);
+    void notifyTimerExpired();
 };
 
 // Function to create a specified number of Food instances

@@ -12,7 +12,7 @@
 #define MAX_ENERGY 100
 #define ENERGY_LOSS_PER_TICK 0.1
 
-#define SPEED_UPPER 1
+#define SPEED_UPPER 0.05
 #define SPEED_LOWER 0
 
 #define AGGRESSIVENESS_UPPER 1
