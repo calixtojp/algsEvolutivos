@@ -11,17 +11,6 @@
 
 using std::vector;
 
-typedef struct position{
-    float x;
-    float y;
-}position_t;
-
-typedef struct RGB{
-    float R;
-    float G;
-    float B;
-}RGB_t;
-
 typedef struct shape{
     float h;//hight
     float w;//width

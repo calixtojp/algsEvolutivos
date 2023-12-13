@@ -11,6 +11,7 @@
 //created libraries
 #include "host.h"
 #include "food.h"
+#include "interactManager.h"
 
 #define windowWidth 700
 #define windowHeight 700
@@ -44,6 +45,9 @@ int main(int argc, char** argv){
 
     Hostes.push_back(&Maria);
     Hostes.push_back(&Jose);
+
+    Manager mng(POPULATION_SIZE);
+    
 
     create_initial_population(Hostes, POPULATION_SIZE);
 

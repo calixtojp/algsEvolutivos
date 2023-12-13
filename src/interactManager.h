@@ -11,7 +11,15 @@
 using std::vector;
 using std::priority_queue;
 
+//Object positions
+typedef struct obj_pos{
+    position_t pos;
+        
+}obj_pos_t;
+
 class Manager {
+
+public:
     vector <Host*> Hostes;  
     vector <Food> Foods;
     int hostes_qtd;
