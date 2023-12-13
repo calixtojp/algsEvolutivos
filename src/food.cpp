@@ -1,4 +1,5 @@
 #include "food.h"
+#include "host.h"
 
 void create_food_population(std::vector<Food>& foods, int food_qty) {
     for (int i = 0; i < food_qty; ++i) {
@@ -34,4 +35,23 @@ void Food::show_food() const {
     glEnd();
 }
 
-void Food::decreaseTimer(){ foodTimer--; }
+void Food::decreaseTimer(){ this->foodTimer--; }
+
+void Food::update() {
+    if(this->getTimer() <= 0) {
+        this->notifyTimerExpired();
+        this->randPosition();
+        this->setTimer(500);
+    }
+}
+
+void Food::registerHost(Host* host) {
+    eatingHosts.push_back(host);
+}
+
+void Food::notifyTimerExpired() {
+    for (Host* host : eatingHosts) {
+        host->isEating = false;
+    }
+    eatingHosts.clear(); // Limpa o registro
+}

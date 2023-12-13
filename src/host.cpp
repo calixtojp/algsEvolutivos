@@ -91,12 +91,15 @@ void Host::move_left(void){
 
 // Function to create a single Host object
 Host* create_host() {
-    float speed = generate_random(0, 1);
-    float aggressiveness = generate_random(0, 1);
-    float reproductionrate = generate_random(0, 1);
-    float pos_x = generate_random(-1, 1);
-    float pos_y = generate_random(-1, 1);
-    float shape = generate_random(0.1, 0.2);
+    float speed; //= generate_random(0, 1);
+    float aggressiveness = generate_random(AGGRESSIVENESs_LOWER, AGGRESSIVENESS_UPPER);
+    float reproductionrate = generate_random(REPRODUCTIONRATE_LOWER, REPRODUCTIONRATE_UPPER);
+    float pos_x = generate_random(POS_X_LOWER, POS_X_UPPER);
+    float pos_y = generate_random(POS_Y_LOWER, POS_Y_UPPER);
+    float shape = generate_random(SHAPE_LOWER, SHAPE_UPPER);
+
+    speed = calculate_speed_based_on_size(SPEED_UPPER, SPEED_LOWER, 
+        SHAPE_LOWER, SHAPE_UPPER, shape);
 
     // Dynamically allocate memory for the Host object
     Host* host = new Host(speed, aggressiveness, reproductionrate);
@@ -130,18 +133,18 @@ void Host::interact_with_food(std::vector<Food>& foods) {
     // Check if the host is already eating
     if (isEating) {
         // Decrement the timer
-        eatingTimer--;
+        //eatingTimer--;
+        if (currentFood != NULL)
+            currentFood->decreaseTimer();
+
+        // increase hosts's energy while eating
+        this->increase_energy(currentFood);
 
         //currentFood->setTimer(eatingTimer); // Why this is segfault?
 
-        if (eatingTimer <= 0) {
+        if (currentFood != NULL && currentFood->getTimer() <= 0) {
             // Eating time is over, remove the consumed food
             isEating = false;
-
-            currentFood->setTimer(500);
-            currentFood->randPosition();
-
-
             // Optionally, you can reset the timer or perform other actions
         }
     } else {
@@ -161,14 +164,60 @@ void Host::interact_with_food(std::vector<Food>& foods) {
                 // The host is in contact with the food
                 // Perform the eating action
                 isEating = true;
-                
+                food.registerHost(this);
                 // Store the currently interacting food
                 currentFood = &food;
 
-                eatingTimer = currentFood->getTimer(); // Set a timer (adjust as needed)
+                //eatingTimer = currentFood->getTimer(); // Set a timer (adjust as needed)
 
                 // Optionally, you can do more, such as increasing a score, etc.
             }
         }
     }
 }
+
+void Host::increase_energy(Food *food) {
+    if(food == NULL) return;
+
+    if(this->energy + food->getEnergyPerUnit() < MAX_ENERGY)
+        this->energy += food->getEnergyPerUnit();
+}
+
+void Host::kill_host_if_energy_is_zero() {
+    if(this->energy <= 0 && this->is_alive) {
+        std::cout << "running low on energy: killing host :(\n";
+        this->is_alive = false;
+    }
+}
+
+void Host::decrease_energy() {
+    this->energy -= ENERGY_LOSS_PER_TICK;
+}
+
+void Host::update(std::vector<Food>& foods) {
+    this->decrease_energy();
+    this->kill_host_if_energy_is_zero();
+    
+    if(!this->is_alive) return;
+
+    this->show_host();
+
+    // Check food interactions for each host
+    this->interact_with_food(foods);
+
+    if(this->currentFood != NULL)
+        this->currentFood->update();
+
+    // Update host state (including movement) based on the eating mechanic
+    if(!(this->isEating)) this->move_left();
+}
+
+float calculate_speed_based_on_size(float speed_upper_bound, float speed_lower_bound, 
+    float size_lower_bound, float size_upper_bound, float size) {
+        float size_magnitude = size / (size_upper_bound - size_lower_bound);
+        float speed = size_magnitude * (speed_upper_bound - speed_lower_bound);
+
+        std::cout << "creating host with speed: " << speed << '\n';
+
+        return speed;
+    }

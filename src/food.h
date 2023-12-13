@@ -4,6 +4,9 @@
 #include <GL/glut.h>
 #include "utils.h"
 
+#define ENERGY_PER_FOOD_UNIT 0.5
+class Host;
+
 class Food {
     
 private:
@@ -12,12 +15,15 @@ private:
     float width;
     float height;
     int foodTimer;
+    float energy_per_unit;
 
+    std::vector<Host*> eatingHosts;
 public:
 
     Food(float initialX, float initialY)
         : x(initialX), y(initialY), width(0.05f), height(0.05f), foodTimer(500) {
         // Constructor code if needed
+        this->energy_per_unit = ENERGY_PER_FOOD_UNIT;
     }
 
     //Operator functions:
@@ -33,6 +39,7 @@ public:
     float getWidth() const { return width; }
     float getHeight() const { return height; }
     int getTimer() const {return foodTimer; }
+    float getEnergyPerUnit() const { return energy_per_unit; }
 
     // Accessors sets
     void setPosition(float newX, float newY);
@@ -45,6 +52,10 @@ public:
 
     // Display the food with OpenGL
     void show_food() const ;
+
+    void update();
+    void registerHost(Host* host);
+    void notifyTimerExpired();
 };
 
 // Function to create a specified number of Food instances
