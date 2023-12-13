@@ -5,6 +5,7 @@
 #include "utils.h"
 
 class Food {
+    
 private:
     float x;
     float y;

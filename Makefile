@@ -6,10 +6,10 @@ SRC_DIR = src
 BUILD_DIR = build
 
 # List of source files
-SRCS = $(SRC_DIR)/main.cpp $(SRC_DIR)/host.cpp $(SRC_DIR)/meme.cpp $(SRC_DIR)/food.cpp $(SRC_DIR)/utils.cpp
+SRCS = $(SRC_DIR)/main.cpp $(SRC_DIR)/host.cpp $(SRC_DIR)/meme.cpp $(SRC_DIR)/food.cpp $(SRC_DIR)/interactManager.cpp $(SRC_DIR)/utils.cpp
 
 # List of header files
-HEADERS = $(SRC_DIR)/host.h $(SRC_DIR)/meme.h $(SRC_DIR)/food.h $(SRC_DIR)/utils.h
+HEADERS = $(SRC_DIR)/host.h $(SRC_DIR)/meme.h $(SRC_DIR)/food.h $(SRC_DIR)/interactManager.h $(SRC_DIR)/utils.h
 
 # Object files will be generated in the build directory
 OBJS = $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SRCS))

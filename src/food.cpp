@@ -15,14 +15,13 @@ void Food::setPosition(float newX, float newY) {
     this->y = newY;
 }
 
+void Food::setTimer(int newT){ foodTimer = newT; }
+
 void Food::randPosition(){
     x = generate_random(-1, 1);
     y = generate_random(-1, 1);
 }
 
-void Food::setTimer(int newT){ foodTimer = newT; }
-
-// Display the food with OpenGL
 void Food::show_food() const {
     glColor3f(0.0f, 0.0f, 0.0f); // Standard black color
     glBegin(GL_POLYGON);

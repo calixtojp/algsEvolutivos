@@ -75,4 +75,4 @@ public:
 void create_initial_population(vector <Host*> &Hostes, int hostes_qtd);
 
 
-#endif // HOST_H
+#endif
