@@ -56,8 +56,6 @@ public:
     void update();
     void registerHost(Host* host);
     void notifyTimerExpired();
-
-    void contaminateHosts(Host *host);
 };
 
 // Function to create a specified number of Food instances
