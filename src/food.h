@@ -19,50 +19,31 @@ public:
         // Constructor code if needed
     }
 
-    // Accessors
+    //Operator functions:
+    // == 
+    bool operator==(const Food& other) const {
+        return (x == other.x && y == other.y &&
+                width == other.width && height == other.height);
+    }
+
+    // Accessors gets
     float getX() const { return x; }
     float getY() const { return y; }
     float getWidth() const { return width; }
     float getHeight() const { return height; }
     int getTimer() const {return foodTimer; }
 
-    // Setters
-    void setPosition(float newX, float newY) {
-        x = newX;
-        y = newY;
-    }
+    // Accessors sets
+    void setPosition(float newX, float newY);
+    void setTimer(int newT);
 
-    void randPosition(){
-        x = generate_random(-1, 1);
-        y = generate_random(-1, 1);
-    }
+    //Other functions:
+    void randPosition();
 
-    void setTimer(int newT){
-        foodTimer = newT;
-    }
-
-    void decreaseTimer(){
-        foodTimer--;
-    }
+    void decreaseTimer();
 
     // Display the food with OpenGL
-    void show_food() const {
-        glColor3f(0.0f, 0.0f, 0.0f); // Standard black color
-        glBegin(GL_POLYGON);
-
-        glVertex2d(x - width / 2, y - height / 2);
-        glVertex2d(x - width / 2, y + height / 2);
-        glVertex2d(x + width / 2, y + height / 2);
-        glVertex2d(x + width / 2, y - height / 2);
-
-        glEnd();
-    }
-
-    // Equality operator for comparing two Food objects
-    bool operator==(const Food& other) const {
-        return (x == other.x && y == other.y &&
-                width == other.width && height == other.height);
-    }
+    void show_food() const ;
 };
 
 // Function to create a specified number of Food instances

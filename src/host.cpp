@@ -89,27 +89,41 @@ void Host::move_left(void){
     //this->pos.x = this->pos.x<-1 ? 1 : this->pos.x;
 }
 
-void create_initial_population(vector <Host*> &Hosts, int hosts_qty) {
-     for (int i = 0; i < hosts_qty; ++i) {
-         float speed = generate_random(0, 0.01);
-         float aggressiveness = generate_random(0, 1);
-         float reproductionrate = generate_random(0, 1);
-         float pos_x = generate_random(-1, 1);
-         float pos_y = generate_random(-1, 1);
-         float shape = generate_random(0.1, 0.2);
+// Function to create a single Host object
+Host* create_host() {
+    float speed = generate_random(0, 1);
+    float aggressiveness = generate_random(0, 1);
+    float reproductionrate = generate_random(0, 1);
+    float pos_x = generate_random(-1, 1);
+    float pos_y = generate_random(-1, 1);
+    float shape = generate_random(0.1, 0.2);
 
-         // Dynamically allocate memory for the Host object
-         Host* temp = new Host(speed, aggressiveness, reproductionrate);
+    // Dynamically allocate memory for the Host object
+    Host* host = new Host(speed, aggressiveness, reproductionrate);
 
-         temp->change_position(pos_x, pos_y);
-         temp->change_color(0, 0, 1);
-         temp->change_shape(shape, shape);
+    host->change_position(pos_x, pos_y);
+    host->change_color(0, 0, 1);
+    host->change_shape(shape, shape);
 
-         temp->show_characteristics();
+    host->show_characteristics();
 
-         // Store the pointer to the dynamically allocated object in the vector
-         Hosts.push_back(temp);
-     }
+    return host;
+}
+
+// Function to create and add multiple Hosts to a vector
+void create_initial_population(std::vector<Host*>& Hosts, int hosts_qty) {
+    for (int i = 0; i < hosts_qty; ++i) {
+        Host* temp = create_host();
+        Hosts.push_back(temp);
+    }
+}
+
+// Function to delete all Host objects in the vector and clear it
+void clear_population(std::vector<Host*>& Hosts) {
+    for (auto host : Hosts) {
+        delete host; // Deallocate memory for each Host
+    }
+    Hosts.clear(); // Clear the vector
 }
 
 void Host::interact_with_food(std::vector<Food>& foods) {
