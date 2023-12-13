@@ -12,6 +12,24 @@
 #define MAX_ENERGY 100
 #define ENERGY_LOSS_PER_TICK 0.1
 
+#define SPEED_UPPER 1
+#define SPEED_LOWER 0
+
+#define AGGRESSIVENESS_UPPER 1
+#define AGGRESSIVENESs_LOWER 0
+
+#define REPRODUCTIONRATE_UPPER 1
+#define REPRODUCTIONRATE_LOWER 0
+
+#define POS_X_UPPER 1
+#define POS_X_LOWER -1
+
+#define POS_Y_UPPER 1
+#define POS_Y_LOWER -1
+
+#define SHAPE_UPPER 0.2
+#define SHAPE_LOWER 0.1
+
 using std::vector;
 
 typedef struct position{
@@ -83,6 +101,8 @@ public:
     void kill_host_if_energy_is_zero();
 };
 
+float calculate_speed_based_on_size(float speed_upper_bound, float speed_lower_bound, 
+    float size_lower_bound, float size_upper_bound, float size);
 void create_initial_population(vector <Host*> &Hostes, int hostes_qtd);
 
 

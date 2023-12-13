@@ -91,12 +91,15 @@ void Host::move_left(void){
 
 // Function to create a single Host object
 Host* create_host() {
-    float speed = generate_random(0, 1);
-    float aggressiveness = generate_random(0, 1);
-    float reproductionrate = generate_random(0, 1);
-    float pos_x = generate_random(-1, 1);
-    float pos_y = generate_random(-1, 1);
-    float shape = generate_random(0.1, 0.2);
+    float speed; //= generate_random(0, 1);
+    float aggressiveness = generate_random(AGGRESSIVENESs_LOWER, AGGRESSIVENESS_UPPER);
+    float reproductionrate = generate_random(REPRODUCTIONRATE_LOWER, REPRODUCTIONRATE_UPPER);
+    float pos_x = generate_random(POS_X_LOWER, POS_X_UPPER);
+    float pos_y = generate_random(POS_Y_LOWER, POS_Y_UPPER);
+    float shape = generate_random(SHAPE_LOWER, SHAPE_UPPER);
+
+    speed = calculate_speed_based_on_size(SPEED_UPPER, SPEED_LOWER, 
+        SHAPE_LOWER, SHAPE_UPPER, shape);
 
     // Dynamically allocate memory for the Host object
     Host* host = new Host(speed, aggressiveness, reproductionrate);
@@ -208,3 +211,13 @@ void Host::update(std::vector<Food>& foods) {
     // Update host state (including movement) based on the eating mechanic
     if(!(this->isEating)) this->move_left();
 }
+
+float calculate_speed_based_on_size(float speed_upper_bound, float speed_lower_bound, 
+    float size_lower_bound, float size_upper_bound, float size) {
+        float size_magnitude = size / (size_upper_bound - size_lower_bound);
+        float speed = size_magnitude * (speed_upper_bound - speed_lower_bound);
+
+        std::cout << "creating host with speed: " << speed << '\n';
+
+        return speed;
+    }
