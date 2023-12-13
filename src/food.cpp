@@ -55,3 +55,19 @@ void Food::notifyTimerExpired() {
     }
     eatingHosts.clear(); // Limpa o registro
 }
+
+void Food::contaminateHosts(Host *new_host){
+    float chance, coin;
+    
+    for (Host* host : eatingHosts) {
+        chance = host->energy / (host->energy + new_host->energy);
+        coin = generate_random(0, 1);
+
+        // Seg_fault here, corrupted double linked list
+        /*if (coin > chance) {
+            host->aggressiveness = new_host->aggressiveness;
+        } else {
+            new_host->aggressiveness = host->aggressiveness;
+        }*/
+    }
+}

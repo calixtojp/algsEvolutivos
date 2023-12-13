@@ -161,6 +161,10 @@ void Host::interact_with_food(std::vector<Food>& foods) {
                 // Perform the eating action
                 isEating = true;
                 food.registerHost(this);
+
+                // Meme contamination
+                //food.contaminateHosts(this);
+
                 // Store the currently interacting food
                 currentFood = &food;
 
