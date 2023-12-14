@@ -9,15 +9,27 @@
 #include "food.h"
 
 using std::vector;
-using std::priority_queue;
+using std::map;
 
-//Object positions
-typedef struct obj_pos{
-    position_t pos;
-        
-}obj_pos_t;
+//Object positions. These objects are the food or the host.
+typedef struct objPos{
+    bool IsHost; //True if is host. False if is food.
+    int posInVector;//The position of the object um vector
+}ObjPos;
+
+//Stores a map of object positions in a dimension.
+typedef map<float, ObjPos> mapPos1D;
+
+//Stores the position of the object given the dimensions X, Y
+typedef struct mapPos{
+    mapPos1D xDim; // map on x dimension
+    mapPos1D yDim; //map on x dimension
+}mapPos_t;
 
 class Manager {
+
+private:
+    mapPos_t mp;
 
 public:
     vector <Host*> Hostes;  
@@ -32,6 +44,9 @@ public:
 
     }
 
+    void show_hosts();
+    void update_hosts();
+    // void show_foods();
 
 };
 

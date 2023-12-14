@@ -28,30 +28,30 @@ void draw();
 void timer(int);
 
 vector <Host*> Hostes;
+Manager mng(1); // Teste
+Host Maria(0.005, 20, 30);//teste
 
 vector <Food> Foods;
 
 int main(int argc, char** argv){
 
-    Host Maria(0.005, 20, 30);
-    Maria.change_position(0.5, 0);
-    Maria.change_color(0, 1, 0);//Maria vai ser verde
-    Maria.change_shape(0.2, 0.2);
+    // Maria.change_position(0.5, 0);
+    // Maria.change_color(0, 1, 0);//Maria vai ser verde
+    // Maria.change_shape(0.2, 0.2);
 
-    Host Jose(0.003, 10, 30);
-    Jose.change_position(0, 0.7);
-    Jose.change_color(1, 0, 0);//Jose vai ser vermelho
-    Jose.change_shape(0.1, 0.1);
+    // Host Jose(0.003, 10, 30);
+    // Jose.change_position(0, 0.7);
+    // Jose.change_color(1, 0, 0);//Jose vai ser vermelho
+    // Jose.change_shape(0.1, 0.1);
 
-    Hostes.push_back(&Maria);
-    Hostes.push_back(&Jose);
+    // Hostes.push_back(&Maria);
+    // Hostes.push_back(&Jose);
 
-    Manager mng(POPULATION_SIZE);
     
 
-    create_initial_population(Hostes, POPULATION_SIZE);
+    // create_initial_population(Hostes, POPULATION_SIZE);
 
-    create_food_population(Foods, POPULATION_SIZE);
+    // create_food_population(Foods, POPULATION_SIZE);
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB);
@@ -75,18 +75,17 @@ void draw(){
     // Coordenada (-1 1) é o canto superior esquerdo
     // Coordenada (0 0) é o centro da tela
 
-    // Display the hosts
-    for (auto it : Hostes) {
-        it->update(Foods);
-    }
+    // // Display the hosts
+    // for (auto it : Hostes) {
+    //     it->update(Foods);
+    // }
 
-    // Display the food
-    for (const auto& food : Foods) {
-        food.show_food();
-    }
+    // // Display the food
+    // for (const auto& food : Foods) {
+    //     food.show_food();
+    // }
 
-    // Host temp = *(Hostes[0]);//desenha só Maria
-    // temp.show_host();
+    mng.show_hosts();
 
     // retangle(0, 0, 0.1, 0.1);
 
@@ -101,6 +100,8 @@ void draw(){
 void timer(int){
     // Executa a função draw para desenhar novamente
     glutPostRedisplay();
+
+    mng.update_hosts();
 
     // O primeiro parâmetro define de quanto em quanto tempo em milissegundos timer será chaamdo
     // Eu coloquei 1000/60 para definir que vai atualizar a 60hz
