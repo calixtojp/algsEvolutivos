@@ -94,6 +94,7 @@ public:
         speed = calculate_speed_based_on_size(CONFIG["SPEED_UPPER"], CONFIG["SPEED_LOWER"], 
             CONFIG["SHAPE_LOWER"], CONFIG["SHAPE_UPPER"], initialGene.shape.h);
         this->speed = speed;
+        this->gene = initialGene;
         this->show_characteristics();
     }
 

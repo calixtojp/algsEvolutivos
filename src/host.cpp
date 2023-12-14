@@ -26,7 +26,7 @@ void Host::change_color(float new_R, float new_G, float new_B){
 }
 
 void Host::show_characteristics(){
-    printf("x:%.2f | y:%.2f | h:%.3f | w:%.3f | RGB(%.2f,%.2f,%.2f) | speed:%.3f\n",
+    printf("x:%.2f | y:%.2f | h:%.3f | w:%.3f | RGB(%.2f,%.2f,%.2f) | speed:%.3f | fov:%.3f\n",
         this->pos.x,
         this->pos.y,
         this->gene.shape.h,
@@ -34,7 +34,8 @@ void Host::show_characteristics(){
         this->gene.color.R,
         this->gene.color.G,
         this->gene.color.B,
-        this->speed
+        this->speed,
+        this->gene.fov
     );
 }
 
@@ -203,13 +204,13 @@ void Host::update(std::vector<Food>& foods, int *number_of_living_hosts) {
     this->show_host();
 
     // Check food interactions for each host
-    this->interact_with_food(foods);
-
-    if(this->currentFood != NULL)
-        this->currentFood->update();
+    //this->interact_with_food(foods);
 
     // Update host state (including movement) based on the eating mechanic
     this->make_a_move(foods);
+
+    if(this->currentFood != NULL)
+        this->currentFood->update();
 }
 
 float calculate_speed_based_on_size(float speed_upper_bound, float speed_lower_bound, 
