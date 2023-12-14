@@ -26,14 +26,15 @@ void Host::change_color(float new_R, float new_G, float new_B){
 }
 
 void Host::show_characteristics(){
-    printf("x:%.2f|y:%.2f|h:%.2f|w:%.2f|RGB(%.2f,%.2f,%.2f)\n",
+    printf("x:%.2f | y:%.2f | h:%.3f | w:%.3f | RGB(%.2f,%.2f,%.2f) | speed:%.3f\n",
         this->pos.x,
         this->pos.y,
         this->gene.shape.h,
         this->gene.shape.w,
         this->gene.color.R,
         this->gene.color.G,
-        this->gene.color.B
+        this->gene.color.B,
+        this->speed
     );
 }
 
@@ -217,8 +218,6 @@ float calculate_speed_based_on_size(float speed_upper_bound, float speed_lower_b
                                     float size_lower_bound, float size_upper_bound, float size) {
     float size_magnitude = size / (size_upper_bound - size_lower_bound);
     float speed = pow((1 / size_magnitude), 2) * (speed_upper_bound - speed_lower_bound);
-
-    std::cout << "creating host with speed: " << speed << '\n';
 
     return speed;
 }

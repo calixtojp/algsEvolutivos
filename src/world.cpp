@@ -8,14 +8,15 @@
 #include "world.h"
 
 void World::update() {
-    for (auto it : this->Hosts) {
-        it->update(this->Foods, &this->number_of_living_hosts);
-    }
-
     // Display the food
     for (const auto& food : this->Foods) {
         food.show_food();
     }
+
+    for (auto it : this->Hosts) {
+        it->update(this->Foods, &this->number_of_living_hosts);
+    }
+
     //std::cout << "living hosts: " << this->number_of_living_hosts << " / " << this->hosts_qtd << '\n';
     if(this->number_of_living_hosts <= 4.0/5.0 * hosts_qtd)
         run_reproduction_algorithm();
