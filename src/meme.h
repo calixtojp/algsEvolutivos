@@ -1,6 +1,8 @@
 #ifndef MEME_H
 #define MEME_H
 
+#include "utils.h"
+
 class Meme {
 public:
 
@@ -18,7 +20,6 @@ public:
     float speed;
     float aggressiveness;
     float reproduction_rate;
-
 };
 
 #endif // MYCLASS_H
