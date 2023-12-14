@@ -41,7 +41,7 @@ void Food::update() {
     if(this->getTimer() <= 0) {
         this->notifyTimerExpired();
         this->randPosition();
-        this->setTimer(CONFIG["FOOD_TIMER"]);
+        this->setTimer(500);
     }
 }
 
@@ -54,4 +54,25 @@ void Food::notifyTimerExpired() {
         host->isEating = false;
     }
     eatingHosts.clear(); // Limpa o registro
+}
+
+bool Food::eatingHostsEmpty(){
+    if(eatingHosts.size() == 0) return true;
+    return false;
+}
+
+void Food::contaminateHosts(Host *new_host){
+    float chance, coin;
+
+    for (Host* host : eatingHosts) {
+        chance = host->energy / (host->energy + new_host->energy);
+        coin = generate_random(0, 1);
+
+        // Seg_fault here, corrupted double linked list
+        /*if (coin > chance) {
+            host->aggressiveness = new_host->aggressiveness;
+        } else {
+            new_host->aggressiveness = host->aggressiveness;
+        }*/
+    }
 }

@@ -139,7 +139,7 @@ void Host::interact_with_food(std::vector<Food>& foods) {
 
         //currentFood->setTimer(eatingTimer); // Why this is segfault?
 
-        if (currentFood != NULL && currentFood->getTimer() <= 0) {
+        if (currentFood == NULL || (currentFood != NULL && currentFood->getTimer() <= 0)) {
             // Eating time is over, remove the consumed food
             isEating = false;
             // Optionally, you can reset the timer or perform other actions
