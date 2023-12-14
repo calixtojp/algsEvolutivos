@@ -12,11 +12,12 @@
 #include "host.h"
 #include "food.h"
 #include "world.h"
+#include "config.h"
 
 #define windowWidth 700
 #define windowHeight 700
 
-#define POPULATION_SIZE 10
+std::unordered_map<std::string, float> CONFIG; // Definition of the global variable
 
 //declaring used namespaces
 using std::vector;
@@ -31,7 +32,9 @@ World *world;
 void OpenGlSetup(int *argc, char** argv);
 
 int main(int argc, char** argv){
-    world = new World(POPULATION_SIZE);
+    CONFIG = readConfig(".conf");
+    
+    world = new World(CONFIG["POPULATION_SIZE"]);
 
     OpenGlSetup(&argc, argv);
 

@@ -9,7 +9,7 @@ BUILD_DIR = build
 SRCS = $(SRC_DIR)/main.cpp $(SRC_DIR)/host.cpp $(SRC_DIR)/meme.cpp $(SRC_DIR)/food.cpp $(SRC_DIR)/world.cpp $(SRC_DIR)/utils.cpp
 
 # List of header files
-HEADERS = $(SRC_DIR)/host.h $(SRC_DIR)/meme.h $(SRC_DIR)/food.h $(SRC_DIR)/world.h $(SRC_DIR)/utils.h
+HEADERS = $(SRC_DIR)/host.h $(SRC_DIR)/meme.h $(SRC_DIR)/food.h $(SRC_DIR)/world.h $(SRC_DIR)/utils.h ${SRC_DIR}/config.h
 
 # Object files will be generated in the build directory
 OBJS = $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SRCS))
@@ -33,3 +33,5 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp $(HEADERS)
 clean:
 	rm -rf $(BUILD_DIR) $(EXECUTABLE)
 
+run:
+	./myprogram

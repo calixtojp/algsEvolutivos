@@ -41,7 +41,7 @@ void Food::update() {
     if(this->getTimer() <= 0) {
         this->notifyTimerExpired();
         this->randPosition();
-        this->setTimer(500);
+        this->setTimer(CONFIG["FOOD_TIMER"]);
     }
 }
 

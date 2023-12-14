@@ -19,3 +19,26 @@ int generate_random_integer(int lower, int upper) {
     // Generate and return a random int in the specified range
     return distribution(gen);
 }
+
+std::unordered_map<std::string, float> readConfig(const std::string& filename) {
+    std::unordered_map<std::string, float> config;
+    std::ifstream file(filename);
+    std::string line;
+
+    while (std::getline(file, line)) {
+        if (line.empty() || line[0] == '#') {
+            continue;
+        }
+
+        std::istringstream is_line(line);
+        std::string key;
+        if (std::getline(is_line, key, '=')) {
+            std::string value;
+            if (std::getline(is_line, value)) {
+                config[key] = std::stof(value);
+            }
+        }
+    }
+
+    return config;
+}

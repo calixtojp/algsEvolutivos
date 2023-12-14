@@ -91,14 +91,14 @@ void Host::move_left(void){
 
 // Function to create a single Host object
 Host* create_initial_host() {
-    float aggressiveness = generate_random(AGGRESSIVENESS_LOWER, AGGRESSIVENESS_UPPER);
-    float reproductionrate = generate_random(REPRODUCTIONRATE_LOWER, REPRODUCTIONRATE_UPPER);
-    float pos_x = generate_random(POS_X_LOWER, POS_X_UPPER);
-    float pos_y = generate_random(POS_Y_LOWER, POS_Y_UPPER);
-    float size = generate_random(SHAPE_LOWER, SHAPE_UPPER);
+    float aggressiveness = generate_random(CONFIG["AGGRESSIVENESS_LOWER"], CONFIG["AGGRESSIVENESS_UPPER"]);
+    float reproductionrate = generate_random(CONFIG["REPRODUCTIONRATE_LOWER"], CONFIG["REPRODUCTIONRATE_UPPER"]);
+    float pos_x = generate_random(CONFIG["POS_X_LOWER"], CONFIG["POS_X_UPPER"]);
+    float pos_y = generate_random(CONFIG["POS_Y_LOWER"], CONFIG["POS_Y_UPPER"]);
+    float size = generate_random(CONFIG["SHAPE_LOWER"], CONFIG["SHAPE_UPPER"]);
 
     RGB_t color = {
-        .R = 0, .G = 0, .B = 1
+        .R = generate_random(0, 1), .G = generate_random(0, 1), .B = generate_random(0, 1)
     };
 
     shape_t shape = {
@@ -179,7 +179,7 @@ void Host::interact_with_food(std::vector<Food>& foods) {
 void Host::increase_energy(Food *food) {
     if(food == NULL) return;
 
-    if(this->energy + food->getEnergyPerUnit() < MAX_ENERGY)
+    if(this->energy + food->getEnergyPerUnit() < CONFIG["MAX_ENERGY"])
         this->energy += food->getEnergyPerUnit();
 }
 
@@ -192,7 +192,7 @@ void Host::kill_host_if_energy_is_zero(int *number_of_living_hosts) {
 }
 
 void Host::decrease_energy() {
-    this->energy -= ENERGY_LOSS_PER_TICK;
+    this->energy -= CONFIG["ENERGY_LOSS_PER_TICK"];
 }
 
 void Host::update(std::vector<Food>& foods, int *number_of_living_hosts) {
@@ -216,7 +216,7 @@ void Host::update(std::vector<Food>& foods, int *number_of_living_hosts) {
 float calculate_speed_based_on_size(float speed_upper_bound, float speed_lower_bound, 
                                     float size_lower_bound, float size_upper_bound, float size) {
     float size_magnitude = size / (size_upper_bound - size_lower_bound);
-    float speed = (1 / size_magnitude) * (speed_upper_bound - speed_lower_bound);
+    float speed = pow((1 / size_magnitude), 2) * (speed_upper_bound - speed_lower_bound);
 
     std::cout << "creating host with speed: " << speed << '\n';
 
@@ -228,8 +228,8 @@ void Host::mutate() {
     if(coin_toss())
         factor = -1;
 
-    this->gene.shape.h = abs(this->gene.shape.h * (1 + factor * MUTATION_MULTIPLICATIVE_MODIFIER));
-    this->gene.shape.w = abs(this->gene.shape.w * (1 + factor * MUTATION_MULTIPLICATIVE_MODIFIER));
+    this->gene.shape.h = abs(this->gene.shape.h * (1 + factor * CONFIG["MUTATION_MULTIPLICATIVE_MODIFIER"]));
+    this->gene.shape.w = abs(this->gene.shape.w * (1 + factor * CONFIG["MUTATION_MULTIPLICATIVE_MODIFIER"]));
 
     this->gene.color.R = mutate_color(this->gene.color.R);
     this->gene.color.G = mutate_color(this->gene.color.G);
@@ -242,7 +242,7 @@ float Host::mutate_color(float color_value) {
     if(coin_toss()) {
         factor = -1;
     }
-    color = abs(color_value + factor * MUTATION_ADDITIVE_MODIFIER);
+    color = abs(color_value + factor * CONFIG["MUTATION_ADDITIVE_MODIFIER"]);
     return color > 1 ? color - 1 : color;
 }
 
