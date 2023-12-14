@@ -164,7 +164,7 @@ void Host::interact_with_food(std::vector<Food>& foods) {
                 food.registerHost(this);
 
                 // Meme contamination
-                //food.contaminateHosts(this);
+                food.contaminateHosts(this);
 
                 // Store the currently interacting food
                 currentFood = &food;

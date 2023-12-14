@@ -61,18 +61,21 @@ bool Food::eatingHostsEmpty(){
     return false;
 }
 
+// cruzamento dos memes de hosts comendo a mesma comida
 void Food::contaminateHosts(Host *new_host){
     float chance, coin;
 
     for (Host* host : eatingHosts) {
         chance = host->energy / (host->energy + new_host->energy);
-        coin = generate_random(0, 1);
+        coin = generate_random(0, 1.3);
 
-        // Seg_fault here, corrupted double linked list
-        /*if (coin > chance) {
+        if(coin > 1){
+            host->aggressiveness = (host->aggressiveness + new_host->aggressiveness)/2;
+            new_host->aggressiveness = host->aggressiveness;
+        } else if (coin > chance) {
             host->aggressiveness = new_host->aggressiveness;
         } else {
             new_host->aggressiveness = host->aggressiveness;
-        }*/
+        }
     }
 }
