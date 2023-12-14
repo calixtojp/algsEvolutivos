@@ -29,7 +29,7 @@ void World::run_reproduction_algorithm() {
 
     //std::vector<Host *> new_hosts;
     while (host != Hosts.end()) {
-        if (!(*host)->is_alive){
+        if ((*host)->state == DEAD) {
             Host *parent_1 = tournament_selection();
             Host *parent_2 = tournament_selection();
 
@@ -58,12 +58,12 @@ Host *World::tournament_selection() {
     int first;
     do {
        first = generate_random_integer(0, hosts_qtd - 1);
-    } while (!this->Hosts.at(first)->is_alive);
+    } while (this->Hosts.at(first)->state == DEAD);
 
     int second;
     do {
        second = generate_random_integer(0, hosts_qtd - 1);
-    } while (!this->Hosts.at(second)->is_alive);
+    } while (this->Hosts.at(second)->state == DEAD);
 
     return this->Hosts.at(second)->energy > this->Hosts.at(first)->energy ? this->Hosts.at(second) : this->Hosts.at(first);
 }

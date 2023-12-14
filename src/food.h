@@ -3,6 +3,7 @@
 
 #include <GL/glut.h>
 #include "utils.h"
+#include "config.h"
 
 #define ENERGY_PER_FOOD_UNIT 0.5
 class Host;
@@ -21,7 +22,7 @@ private:
 public:
 
     Food(float initialX, float initialY)
-        : x(initialX), y(initialY), width(0.05f), height(0.05f), foodTimer(500) {
+        : x(initialX), y(initialY), width(0.05f), height(0.05f), foodTimer(CONFIG["FOOD_TIMER"]) {
         // Constructor code if needed
         this->energy_per_unit = ENERGY_PER_FOOD_UNIT;
     }

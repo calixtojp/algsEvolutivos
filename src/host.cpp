@@ -122,60 +122,6 @@ Host* create_initial_host() {
     return host;
 }
 
-// Function to delete all Host objects in the vector and clear it
-
-
-void Host::interact_with_food(std::vector<Food>& foods) {
-    // Check if the host is already eating
-    if (isEating) {
-        // Decrement the timer
-        //eatingTimer--;
-        if (currentFood != NULL)
-            currentFood->decreaseTimer();
-
-        // increase hosts's energy while eating
-        this->increase_energy(currentFood);
-
-        //currentFood->setTimer(eatingTimer); // Why this is segfault?
-
-        if (currentFood == NULL || (currentFood != NULL && currentFood->getTimer() <= 0)) {
-            // Eating time is over, remove the consumed food
-            isEating = false;
-            // Optionally, you can reset the timer or perform other actions
-        }
-    } else {
-        // Iterate through all foods to check for interaction
-        for (auto& food : foods) {
-            float food_x = food.getX();
-            float food_y = food.getY();
-            float food_width = food.getWidth();
-            float food_height = food.getHeight();
-
-            // Check if the host is in contact with the food
-            if (pos.x - gene.shape.w / 2 < food_x + food_width / 2 &&
-                pos.x + gene.shape.w / 2 > food_x - food_width / 2 &&
-                pos.y - gene.shape.h / 2 < food_y + food_height / 2 &&
-                pos.y + gene.shape.h / 2 > food_y - food_height / 2) {
-                
-                // The host is in contact with the food
-                // Perform the eating action
-                isEating = true;
-                food.registerHost(this);
-
-                // Meme contamination
-                food.contaminateHosts(this);
-
-                // Store the currently interacting food
-                currentFood = &food;
-
-                //eatingTimer = currentFood->getTimer(); // Set a timer (adjust as needed)
-
-                // Optionally, you can do more, such as increasing a score, etc.
-            }
-        }
-    }
-}
-
 void Host::increase_energy(Food *food) {
     if(food == NULL) return;
 
@@ -183,34 +129,17 @@ void Host::increase_energy(Food *food) {
         this->energy += food->getEnergyPerUnit();
 }
 
-void Host::kill_host_if_energy_is_zero(int *number_of_living_hosts) {
-    if(this->energy <= 0 && this->is_alive) {
+bool Host::should_host_die(int *number_of_living_hosts) {
+    if(this->energy <= 0 && this->state != DEAD) {
         std::cout << "running low on energy: killing host :(\n";
         (*number_of_living_hosts)--;
-        this->is_alive = false;
+        return true;
     }
+    return false;
 }
 
 void Host::decrease_energy() {
     this->energy -= CONFIG["ENERGY_LOSS_PER_TICK"];
-}
-
-void Host::update(std::vector<Food>& foods, int *number_of_living_hosts) {
-    this->decrease_energy();
-    this->kill_host_if_energy_is_zero(number_of_living_hosts);
-    
-    if(!this->is_alive) return;
-
-    this->show_host();
-
-    // Check food interactions for each host
-    //this->interact_with_food(foods);
-
-    // Update host state (including movement) based on the eating mechanic
-    this->make_a_move(foods);
-
-    if(this->currentFood != NULL)
-        this->currentFood->update();
 }
 
 float calculate_speed_based_on_size(float speed_upper_bound, float speed_lower_bound, 
@@ -251,62 +180,61 @@ bool Host::coin_toss() {
     return rand % 2;
 }
 
-void Host::make_a_move(std::vector<Food>& foods) {
+void Host::update(std::vector<Food>& foods, int *number_of_living_hosts) {
     switch (this->state) {
-    case LOOKING_FOR_FOOD:
-        this->move_randomly_on_four_axis();
-        if(findFoodInVision(foods))
-            this->state = GOING_TO_FOOD;
-        break;
-    case GOING_TO_FOOD:
-        this->goToFood();
-        if(this->hasFoundFood())
-            this->state = EATING;
-        break;
-    case EATING:
-        if(!this->eat(currentFood))
-            this->state = LOOKING_FOR_FOOD;
-        break;
-    case TARGETING:
-        /* code */
-        break;
-    case TARGETED:
-        /* code */
-        break;
-    case ATTACKING:
-        /* code */
-        break;
-    case DEFENDING:
-        /* code */
-        break;
-    case FLEEING:
-        /* code */
-        break;
-    case DEAD:
-        break;
-    default:
-        break;
+        case LOOKING_FOR_FOOD: {
+            position_t random = { generate_random(-1, 1), generate_random(-1, 1) };
+            if(this->random_movement_timer == 0) {
+                this->random_movement_timer = CONFIG["RANDOM_MOVEMENT_TIMER"];
+            }
+            if(this->random_movement_timer == CONFIG["RANDOM_MOVEMENT_TIMER"]) {
+                this->going_to = random;
+            }
+            this->random_movement_timer--;
+
+            this->goTo(this->going_to);
+            if(findFoodInVision(foods))
+                this->state = GOING_TO_FOOD;
+            break;
+            }
+        case GOING_TO_FOOD:
+            this->goToFood();
+            if(this->hasFoundFood())
+                this->state = EATING;
+            break;
+        case EATING:
+            if(!this->eat(currentFood))
+                this->state = LOOKING_FOR_FOOD;
+            break;
+        case TARGETING:
+            /* code */
+            break;
+        case TARGETED:
+            /* code */
+            break;
+        case ATTACKING:
+            /* code */
+            break;
+        case DEFENDING:
+            /* code */
+            break;
+        case FLEEING:
+            /* code */
+            break;
+        case DEAD:
+            break;
+        default:
+            break;
     }
-}
 
-void Host::move_randomly_on_four_axis() {
-    int rand = generate_random_integer(0, 3);
-
-    switch (rand) {
-    case 0:
-        this->move_left();
-        break;
-    case 1:
-        this->move_right();
-        break;
-    case 2:
-        this->move_up();       
-        break;
-    case 3:
-        this->move_down();
-        break;
-    default:
-        break;
+    this->decrease_energy();
+    if(should_host_die(number_of_living_hosts)) {
+        this->state = DEAD;
+    }
+    if(this->state != DEAD) {
+        this->show_host();
+        if(this->currentFood != NULL)
+            this->currentFood->update();
     }
 }
 
@@ -346,9 +274,9 @@ bool Host::findFoodInVision(std::vector<Food>& foods) {
     return false; // Indica que nenhuma comida foi encontrada
 }
 
-void Host::goToFood() {
-    float x_factor = this->currentFood->getX() - this->pos.x;
-    float y_factor = this->currentFood->getY() - this->pos.y;
+void Host::goTo(position_t position) {
+    float x_factor = position.x - this->pos.x;
+    float y_factor = position.y - this->pos.y;
     std::stack<enum Direction> directions;
     
     if(x_factor > 0)
@@ -380,6 +308,10 @@ void Host::goToFood() {
         }
         directions.pop();
     }
+}
+
+void Host::goToFood() {
+    this->goTo({ this->currentFood->getX(), this->currentFood->getY() });
 }
 
 bool Host::hasFoundFood() {

@@ -72,10 +72,9 @@ public:
     gene_t gene;
     position_t pos;
 
-    bool isEating;
-    int eatingTimer;
-    bool is_alive;
+    position_t going_to;
     float energy;
+    int random_movement_timer;
 
     Host(float initialAggressiveness,
         float initialReproductionRate,
@@ -85,8 +84,7 @@ public:
             CONFIG["SHAPE_LOWER"], CONFIG["SHAPE_UPPER"], initialGene.shape.h), initialAggressiveness, 
             initialReproductionRate), currentFood(nullptr) {
         // Constructor code for the Host class if needed
-        
-        this->is_alive = true;
+
         this->energy = CONFIG["MAX_ENERGY"] / 2;
         this->change_position(initialPos.x, initialPos.y);
         this->change_color(initialGene.color.R, initialGene.color.G, initialGene.color.B);
@@ -95,6 +93,8 @@ public:
             CONFIG["SHAPE_LOWER"], CONFIG["SHAPE_UPPER"], initialGene.shape.h);
         this->speed = speed;
         this->gene = initialGene;
+        this->random_movement_timer = CONFIG["RANDOM_MOVEMENT_TIMER"];
+        this->state = LOOKING_FOR_FOOD;
         this->show_characteristics();
     }
 
@@ -119,15 +119,13 @@ public:
     void update(std::vector<Food>& foods, int *number_of_living_hosts);
     void increase_energy(Food *food);
     void decrease_energy();
-    void kill_host_if_energy_is_zero(int *number_of_living_hosts);
+    bool should_host_die(int *number_of_living_hosts);
 
     void mutate();
 
-    void make_a_move(std::vector<Food>& foods);
-    void move_randomly_on_four_axis();
-
     bool eat(Food *food);
     bool findFoodInVision(std::vector<Food>& foods);
+    void goTo(position_t position);
     void goToFood();
     bool hasFoundFood();
 };
