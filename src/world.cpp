@@ -25,30 +25,31 @@ void World::update() {
 void World::run_reproduction_algorithm() {
     std::cout << "reproducing remaining hosts\n";
 
-    std::vector<Host *> new_hosts;
-    for (auto host : this->Hosts) {
-        if (!host->is_alive) continue;
+    auto host = Hosts.begin();
 
-        host->mutate();
-    }
+    //std::vector<Host *> new_hosts;
+    while (host != Hosts.end()) {
+        if (!(*host)->is_alive){
+            Host *parent_1 = tournament_selection();
+            Host *parent_2 = tournament_selection();
 
-    for(int i = 0; i < this->hosts_qtd; i++) {
-        Host *parent_1 = tournament_selection();
-        Host *parent_2 = tournament_selection();
+            if(parent_1 == NULL || parent_2 == NULL) {
+                std::cout << "simulation is over: all hosts died :(((\n";
+                exit(0);
+            }
 
-        if(parent_1 == NULL || parent_2 == NULL) {
-            std::cout << "simulation is over: all hosts died :(((\n";
-            exit(0);
+            Hosts.erase(host);
+
+            Hosts.push_back(reproduce_hosts(parent_1, parent_2));
+
+            this->number_of_living_hosts++;
+
+            host--;
+        } else {
+            (*host)->mutate();
         }
-
-        new_hosts.push_back(reproduce_hosts(parent_1, parent_2));
+        host++;
     }
-
-    this->number_of_living_hosts = hosts_qtd;
-
-    clear_population(Hosts);
-    
-    Hosts = new_hosts;
 }
 
 Host *World::tournament_selection() {

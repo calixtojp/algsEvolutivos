@@ -60,7 +60,6 @@ void Host::move_up(void){
         this->pos.y = -1;
         this->pos.x = generate_random(-1, 1);
     }
-    //this->pos.y = this->pos.y>1 ? -1 : this->pos.y;
 }
 
 void Host::move_right(void){
@@ -69,7 +68,6 @@ void Host::move_right(void){
         this->pos.x = -1;
         this->pos.y = generate_random(-1, 1);
     }
-    //this->pos.x = this->pos.x>1 ? -1 : this->pos.x;
 }
 
 void Host::move_down(void){
@@ -78,7 +76,6 @@ void Host::move_down(void){
         this->pos.y = 1;
         this->pos.x = generate_random(-1, 1);
     }
-    //this->pos.y = this->pos.y<-1 ? 1 : this->pos.y;
 }
 
 void Host::move_left(void){
@@ -87,7 +84,6 @@ void Host::move_left(void){
         this->pos.x = 1;
         this->pos.y = generate_random(-1, 1);
     }
-    //this->pos.x = this->pos.x<-1 ? 1 : this->pos.x;
 }
 
 // Function to create a single Host object

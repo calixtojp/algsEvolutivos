@@ -66,6 +66,7 @@ void Food::contaminateHosts(Host *new_host){
     float chance, coin;
 
     for (Host* host : eatingHosts) {
+        if(!host->is_alive) continue;
         chance = host->energy / (host->energy + new_host->energy);
         coin = generate_random(0, 1.3);
 
