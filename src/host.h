@@ -12,6 +12,25 @@
 
 using std::vector;
 
+typedef enum HostStateEnum {
+    LOOKING_FOR_FOOD, // Não há comida no campo de visao
+    GOING_TO_FOOD, // Há comida no campo de visao
+    EATING,
+    TARGETING, // Coloca alvo em outro host
+    TARGETED, // É alvo de um host
+    ATTACKING, // Caso targeting e aggressiveness alto
+    DEFENDING, // Caso targeted e aggressiveness alto
+    FLEEING, // Caso targeted e aggressiveness baixo
+    DEAD
+} HostState;
+
+enum Direction {
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN
+};
+
 typedef struct position{
     float x;
     float y;
@@ -31,6 +50,7 @@ typedef struct shape{
 typedef struct gene{
     shape_t shape;
     RGB_t color;
+    float fov;
 }gene_t;
 
 float calculate_speed_based_on_size(float speed_upper_bound, float speed_lower_bound, 
@@ -46,7 +66,9 @@ private:
 
     float mutate_color(float color_value);
     bool coin_toss();
+    
 public:
+    HostState state;
     gene_t gene;
     position_t pos;
 
@@ -99,6 +121,14 @@ public:
     void kill_host_if_energy_is_zero(int *number_of_living_hosts);
 
     void mutate();
+
+    void make_a_move(std::vector<Food>& foods);
+    void move_randomly_on_four_axis();
+
+    bool eat(Food *food);
+    bool findFoodInVision(std::vector<Food>& foods);
+    void goToFood();
+    bool hasFoundFood();
 };
 
 #endif

@@ -51,7 +51,7 @@ void Food::registerHost(Host* host) {
 
 void Food::notifyTimerExpired() {
     for (Host* host : eatingHosts) {
-        host->isEating = false;
+        host->state = LOOKING_FOR_FOOD;
     }
     eatingHosts.clear(); // Limpa o registro
 }

@@ -87,6 +87,8 @@ Host *World::reproduce_hosts(Host *parent_1, Host *parent_2) {
     gene.shape.h = (parent_1->gene.shape.h + parent_2->gene.shape.h) / 2;
     gene.shape.w = (parent_1->gene.shape.w + parent_2->gene.shape.w) / 2;
 
+    gene.fov = (parent_1->gene.fov + parent_2->gene.fov) / 2;
+
     aggressiveness = (parent_1->aggressiveness + parent_2->aggressiveness) / 2;
     reproductionRate = (parent_1->reproduction_rate + parent_2->reproduction_rate) / 2;
 
