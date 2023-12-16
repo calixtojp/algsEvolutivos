@@ -7,12 +7,11 @@
 #include "utils.h"
 #include "host.h"
 #include "food.h"
-#include "interactManager.h"
 
 using std::vector;
 using std::priority_queue;
 
-class World : public Manager{
+class World {
     vector <Host*> Hosts;  
     vector <Food> Foods;
     
@@ -24,7 +23,7 @@ class World : public Manager{
 public:
 
 
-    World(int hosts_qtd): Manager(hosts_qtd), hosts_qtd(hosts_qtd) {
+    World(int hosts_qtd) : hosts_qtd(hosts_qtd) {
         create_initial_population(this->Hosts, this->hosts_qtd);
         create_food_population((this->Foods), this->hosts_qtd / 2);
         this->number_of_living_hosts = this->hosts_qtd;

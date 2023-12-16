@@ -20,6 +20,7 @@ public:
     float speed;
     float aggressiveness;
     float reproduction_rate;
+
 };
 
-#endif // MYCLASS_H
+#endif

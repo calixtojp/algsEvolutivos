@@ -39,7 +39,7 @@ typedef struct shape{
 typedef struct gene{
     shape_t shape;
     RGB_t color;
-    float fov;
+    float fov; // field of view
 }gene_t;
 
 float calculate_speed_based_on_size(float speed_upper_bound, float speed_lower_bound, 
@@ -102,16 +102,15 @@ public:
     void move_down(void);
     void move_left(void);
 
-    //Handling food interactions
-    // void interact_with_food(std::vector<Food>& foods);
-
+    //To change characteristics
     void update(std::vector<Food>& foods, int *number_of_living_hosts);
     void increase_energy(Food *food);
-    void decrease_energy();
+    void decrease_energy(int subtracted_qtd);
     bool should_host_die(int *number_of_living_hosts);
 
     void mutate();
 
+    //To perform actions
     bool eat(Food *food);
     bool findFoodInVision(std::vector<Food>& foods);
     void goTo(position_t position);

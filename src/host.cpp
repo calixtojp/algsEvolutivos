@@ -138,8 +138,8 @@ bool Host::should_host_die(int *number_of_living_hosts) {
     return false;
 }
 
-void Host::decrease_energy() {
-    this->energy -= CONFIG["ENERGY_LOSS_PER_TICK"];
+void Host::decrease_energy(int subtracted_qtd) {
+    this->energy -= subtracted_qtd;
 }
 
 float calculate_speed_based_on_size(float speed_upper_bound, float speed_lower_bound, 
@@ -227,10 +227,13 @@ void Host::update(std::vector<Food>& foods, int *number_of_living_hosts) {
             break;
     }
 
-    this->decrease_energy();
+    //Every time you update you lose energy
+    this->decrease_energy(CONFIG["ENERGY_LOSS_PER_TICK"]);
+
     if(should_host_die(number_of_living_hosts)) {
         this->state = DEAD;
     }
+    
     if(this->state != DEAD) {
         this->show_host();
         if(this->currentFood != NULL)
