@@ -17,13 +17,5 @@ void Manager::show_hosts(void){
 }
 
 void Manager::update_hosts(void){
-    for(auto it : this->Hostes) {
-        it->decrease_energy();
-        it->kill_host_if_energy_is_zero();
 
-        if(!it->is_alive) return;
-        
-        
-                
-    }
 }

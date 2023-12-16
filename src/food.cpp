@@ -51,7 +51,7 @@ void Food::registerHost(Host* host) {
 
 void Food::notifyTimerExpired() {
     for (Host* host : eatingHosts) {
-        host->isEating = false;
+        host->state = LOOKING_FOR_FOOD;
     }
     eatingHosts.clear(); // Limpa o registro
 }
@@ -66,7 +66,7 @@ void Food::contaminateHosts(Host *new_host){
     float chance, coin;
 
     for (Host* host : eatingHosts) {
-        if(!host->is_alive) continue;
+        if(host->state == DEAD) continue;
         chance = host->energy / (host->energy + new_host->energy);
         coin = generate_random(0, 1.3);
 

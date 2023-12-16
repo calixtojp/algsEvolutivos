@@ -29,6 +29,7 @@ typedef struct mapPos{
 class Manager {
 
 private:
+
     mapPos_t mp;
 
 public:
@@ -36,17 +37,14 @@ public:
     vector <Food> Foods;
     int hostes_qtd;
 
-    Manager(int hostes_qtd)
-        : hostes_qtd(hostes_qtd) {
-
-        create_initial_population(this->Hostes, this->hostes_qtd);
-        create_food_population((this->Foods), this->hostes_qtd);
-
+    Manager(int hostes_qtd){
+        this->hostes_qtd = hostes_qtd;
     }
 
     void show_hosts();
     void update_hosts();
     // void show_foods();
+    // void wake_up_host();
 
 };
 

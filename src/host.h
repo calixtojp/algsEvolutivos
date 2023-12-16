@@ -12,6 +12,25 @@
 
 using std::vector;
 
+typedef enum HostStateEnum {
+    LOOKING_FOR_FOOD, // Não há comida no campo de visao
+    GOING_TO_FOOD, // Há comida no campo de visao
+    EATING,
+    TARGETING, // Coloca alvo em outro host
+    TARGETED, // É alvo de um host
+    ATTACKING, // Caso targeting e aggressiveness alto
+    DEFENDING, // Caso targeted e aggressiveness alto
+    FLEEING, // Caso targeted e aggressiveness baixo
+    DEAD
+} HostState;
+
+enum Direction {
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN
+};
+
 typedef struct shape{
     float h;//hight
     float w;//width
@@ -20,6 +39,7 @@ typedef struct shape{
 typedef struct gene{
     shape_t shape;
     RGB_t color;
+    float fov;
 }gene_t;
 
 float calculate_speed_based_on_size(float speed_upper_bound, float speed_lower_bound, 
@@ -37,13 +57,13 @@ private:
     bool coin_toss();
     
 public:
+    HostState state;
     gene_t gene;
     position_t pos;
 
-    bool isEating;
-    int eatingTimer;
-    bool is_alive;
+    position_t going_to;
     float energy;
+    int random_movement_timer;
 
     Host(float initialAggressiveness,
         float initialReproductionRate,
@@ -53,8 +73,7 @@ public:
             CONFIG["SHAPE_LOWER"], CONFIG["SHAPE_UPPER"], initialGene.shape.h), initialAggressiveness, 
             initialReproductionRate), currentFood(nullptr) {
         // Constructor code for the Host class if needed
-        
-        this->is_alive = true;
+
         this->energy = CONFIG["MAX_ENERGY"] / 2;
         this->change_position(initialPos.x, initialPos.y);
         this->change_color(initialGene.color.R, initialGene.color.G, initialGene.color.B);
@@ -62,6 +81,9 @@ public:
         speed = calculate_speed_based_on_size(CONFIG["SPEED_UPPER"], CONFIG["SPEED_LOWER"], 
             CONFIG["SHAPE_LOWER"], CONFIG["SHAPE_UPPER"], initialGene.shape.h);
         this->speed = speed;
+        this->gene = initialGene;
+        this->random_movement_timer = CONFIG["RANDOM_MOVEMENT_TIMER"];
+        this->state = LOOKING_FOR_FOOD;
         this->show_characteristics();
     }
 
@@ -81,14 +103,20 @@ public:
     void move_left(void);
 
     //Handling food interactions
-    void interact_with_food(std::vector<Food>& foods);
+    // void interact_with_food(std::vector<Food>& foods);
 
     void update(std::vector<Food>& foods, int *number_of_living_hosts);
     void increase_energy(Food *food);
     void decrease_energy();
-    void kill_host_if_energy_is_zero(int *number_of_living_hosts);
+    bool should_host_die(int *number_of_living_hosts);
 
     void mutate();
+
+    bool eat(Food *food);
+    bool findFoodInVision(std::vector<Food>& foods);
+    void goTo(position_t position);
+    void goToFood();
+    bool hasFoundFood();
 };
 
 #endif

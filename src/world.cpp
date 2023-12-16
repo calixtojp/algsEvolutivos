@@ -30,7 +30,7 @@ void World::run_reproduction_algorithm() {
 
     //std::vector<Host *> new_hosts;
     while (host != Hosts.end()) {
-        if (!(*host)->is_alive){
+        if ((*host)->state == DEAD) {
             Host *parent_1 = tournament_selection();
             Host *parent_2 = tournament_selection();
 
@@ -59,12 +59,12 @@ Host *World::tournament_selection() {
     int first;
     do {
        first = generate_random_integer(0, hosts_qtd - 1);
-    } while (!this->Hosts.at(first)->is_alive);
+    } while (this->Hosts.at(first)->state == DEAD);
 
     int second;
     do {
        second = generate_random_integer(0, hosts_qtd - 1);
-    } while (!this->Hosts.at(second)->is_alive);
+    } while (this->Hosts.at(second)->state == DEAD);
 
     return this->Hosts.at(second)->energy > this->Hosts.at(first)->energy ? this->Hosts.at(second) : this->Hosts.at(first);
 }
@@ -87,6 +87,8 @@ Host *World::reproduce_hosts(Host *parent_1, Host *parent_2) {
 
     gene.shape.h = (parent_1->gene.shape.h + parent_2->gene.shape.h) / 2;
     gene.shape.w = (parent_1->gene.shape.w + parent_2->gene.shape.w) / 2;
+
+    gene.fov = (parent_1->gene.fov + parent_2->gene.fov) / 2;
 
     aggressiveness = (parent_1->aggressiveness + parent_2->aggressiveness) / 2;
     reproductionRate = (parent_1->reproduction_rate + parent_2->reproduction_rate) / 2;
