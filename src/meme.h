@@ -7,19 +7,16 @@ class Meme {
 public:
 
     Meme(float initialSpeed,
-        float initialAggressiveness,
-        float initialReproductionRate
+        float initialAggressiveness
         )
         :
         speed(initialSpeed),
-        aggressiveness(initialAggressiveness),
-        reproduction_rate(initialReproductionRate) {
+        aggressiveness(initialAggressiveness) {
         // Constructor code if needed
     }
 
     float speed;
     float aggressiveness;
-    float reproduction_rate;
 
 };
 

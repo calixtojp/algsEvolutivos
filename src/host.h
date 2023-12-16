@@ -66,12 +66,10 @@ public:
     int random_movement_timer;
 
     Host(float initialAggressiveness,
-        float initialReproductionRate,
         gene_t initialGene,
         position_t initialPos) 
             : Meme(calculate_speed_based_on_size(CONFIG["SPEED_UPPER"], CONFIG["SPEED_LOWER"], 
-            CONFIG["SHAPE_LOWER"], CONFIG["SHAPE_UPPER"], initialGene.shape.h), initialAggressiveness, 
-            initialReproductionRate), currentFood(nullptr) {
+            CONFIG["SHAPE_LOWER"], CONFIG["SHAPE_UPPER"], initialGene.shape.h), initialAggressiveness), currentFood(nullptr) {
         // Constructor code for the Host class if needed
 
         this->energy = CONFIG["MAX_ENERGY"] / 2;

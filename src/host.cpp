@@ -90,7 +90,6 @@ void Host::move_left(void){
 // Function to create a single Host object
 Host* create_initial_host() {
     float aggressiveness = generate_random(CONFIG["AGGRESSIVENESS_LOWER"], CONFIG["AGGRESSIVENESS_UPPER"]);
-    float reproductionrate = generate_random(CONFIG["REPRODUCTIONRATE_LOWER"], CONFIG["REPRODUCTIONRATE_UPPER"]);
     float pos_x = generate_random(CONFIG["POS_X_LOWER"], CONFIG["POS_X_UPPER"]);
     float pos_y = generate_random(CONFIG["POS_Y_LOWER"], CONFIG["POS_Y_UPPER"]);
     float size = generate_random(CONFIG["SHAPE_LOWER"], CONFIG["SHAPE_UPPER"]);
@@ -117,7 +116,7 @@ Host* create_initial_host() {
     };
 
     // Dynamically allocate memory for the Host object
-    Host* host = new Host(aggressiveness, reproductionrate, gene, pos);
+    Host* host = new Host(aggressiveness, gene, pos);
 
     return host;
 }
