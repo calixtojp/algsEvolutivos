@@ -68,15 +68,19 @@ void Food::contaminateHosts(Host *new_host){
     for (Host* host : eatingHosts) {
         if(host->state == DEAD) continue;
         chance = host->energy / (host->energy + new_host->energy);
-        coin = generate_random(0, 1.3);
+        coin = generate_random(0, 1.25);
 
         if(coin > 1){
             host->aggressiveness = (host->aggressiveness + new_host->aggressiveness)/2;
+            host->speed = (host->speed + new_host->speed)/2;
             new_host->aggressiveness = host->aggressiveness;
+            new_host->speed = host->speed;
         } else if (coin > chance) {
             host->aggressiveness = new_host->aggressiveness;
+            host->speed = new_host->speed;
         } else {
             new_host->aggressiveness = host->aggressiveness;
+            new_host->speed = host->speed;
         }
     }
 }

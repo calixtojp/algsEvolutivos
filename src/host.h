@@ -65,20 +65,20 @@ public:
     float energy;
     int random_movement_timer;
 
-    Host(float initialAggressiveness,
+    Host(float initialAggressiveness, 
+        float initialSpeed,
         gene_t initialGene,
         position_t initialPos) 
-            : Meme(calculate_speed_based_on_size(CONFIG["SPEED_UPPER"], CONFIG["SPEED_LOWER"], 
-            CONFIG["SHAPE_LOWER"], CONFIG["SHAPE_UPPER"], initialGene.shape.h), initialAggressiveness), currentFood(nullptr) {
+            : Meme(initialSpeed, initialAggressiveness), currentFood(nullptr) {
         // Constructor code for the Host class if needed
 
         this->energy = CONFIG["MAX_ENERGY"] / 2;
         this->change_position(initialPos.x, initialPos.y);
         this->change_color(initialGene.color.R, initialGene.color.G, initialGene.color.B);
         this->change_shape(initialGene.shape.h, initialGene.shape.w);
-        speed = calculate_speed_based_on_size(CONFIG["SPEED_UPPER"], CONFIG["SPEED_LOWER"], 
+        /*speed = calculate_speed_based_on_size(CONFIG["SPEED_UPPER"], CONFIG["SPEED_LOWER"], 
             CONFIG["SHAPE_LOWER"], CONFIG["SHAPE_UPPER"], initialGene.shape.h);
-        this->speed = speed;
+        this->speed = speed;*/
         this->gene = initialGene;
         this->random_movement_timer = CONFIG["RANDOM_MOVEMENT_TIMER"];
         this->state = LOOKING_FOR_FOOD;
@@ -103,7 +103,8 @@ public:
     //To change characteristics
     void update(std::vector<Food>& foods, int *number_of_living_hosts);
     void increase_energy(Food *food);
-    void decrease_energy(int subtracted_qtd);
+    float calculate_energy_loss();
+    void decrease_energy(float subtracted_qtd);
     bool should_host_die(int *number_of_living_hosts);
 
     void mutate();

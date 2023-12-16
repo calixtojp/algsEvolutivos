@@ -65,31 +65,26 @@ void Host::move_up(void){
 
 void Host::move_right(void){
     this->pos.x += this->speed;
-    if(this->pos.x > 1){
+    if(this->pos.x > 1)
         this->pos.x = -1;
-        this->pos.y = generate_random(-1, 1);
-    }
 }
 
 void Host::move_down(void){
     this->pos.y -= this->speed;
-    if(this->pos.y < -1){
+    if(this->pos.y < -1)
         this->pos.y = 1;
-        this->pos.x = generate_random(-1, 1);
-    }
 }
 
 void Host::move_left(void){
     this->pos.x -= this->speed;
-    if(this->pos.x < -1){
+    if(this->pos.x < -1)
         this->pos.x = 1;
-        this->pos.y = generate_random(-1, 1);
-    }
 }
 
 // Function to create a single Host object
 Host* create_initial_host() {
     float aggressiveness = generate_random(CONFIG["AGGRESSIVENESS_LOWER"], CONFIG["AGGRESSIVENESS_UPPER"]);
+    float speed = generate_random(CONFIG["SPEED_LOWER"], CONFIG["SPEED_UPPER"]);
     float pos_x = generate_random(CONFIG["POS_X_LOWER"], CONFIG["POS_X_UPPER"]);
     float pos_y = generate_random(CONFIG["POS_Y_LOWER"], CONFIG["POS_Y_UPPER"]);
     float size = generate_random(CONFIG["SHAPE_LOWER"], CONFIG["SHAPE_UPPER"]);
@@ -116,7 +111,7 @@ Host* create_initial_host() {
     };
 
     // Dynamically allocate memory for the Host object
-    Host* host = new Host(aggressiveness, gene, pos);
+    Host* host = new Host(aggressiveness, speed, gene, pos);
 
     return host;
 }
@@ -128,6 +123,13 @@ void Host::increase_energy(Food *food) {
         this->energy += food->getEnergyPerUnit();
 }
 
+float Host::calculate_energy_loss(){
+    float loss = 0;
+    loss += 10*(this->speed); // Temos q ver certinho esses fatores multiplicativos ainda
+    
+    return loss;
+}
+
 bool Host::should_host_die(int *number_of_living_hosts) {
     if(this->energy <= 0 && this->state != DEAD) {
         std::cout << "running low on energy: killing host :(\n";
@@ -137,25 +139,25 @@ bool Host::should_host_die(int *number_of_living_hosts) {
     return false;
 }
 
-void Host::decrease_energy(int subtracted_qtd) {
+void Host::decrease_energy(float subtracted_qtd) {
     this->energy -= subtracted_qtd;
 }
 
-float calculate_speed_based_on_size(float speed_upper_bound, float speed_lower_bound, 
+/*float calculate_speed_based_on_size(float speed_upper_bound, float speed_lower_bound, 
                                     float size_lower_bound, float size_upper_bound, float size) {
     float size_magnitude = size / (size_upper_bound - size_lower_bound);
     float speed = pow((1 / size_magnitude), 2) * (speed_upper_bound - speed_lower_bound);
 
     return speed;
-}
+}*/
 
 void Host::mutate() {
     int factor = 1;
     if(coin_toss())
         factor = -1;
 
-    this->gene.shape.h = abs(this->gene.shape.h * (1 + factor * CONFIG["MUTATION_MULTIPLICATIVE_MODIFIER"]));
-    this->gene.shape.w = abs(this->gene.shape.w * (1 + factor * CONFIG["MUTATION_MULTIPLICATIVE_MODIFIER"]));
+    //this->gene.shape.h = abs(this->gene.shape.h * (1 + factor * CONFIG["MUTATION_MULTIPLICATIVE_MODIFIER"]));
+    //this->gene.shape.w = abs(this->gene.shape.w * (1 + factor * CONFIG["MUTATION_MULTIPLICATIVE_MODIFIER"]));
 
     this->gene.color.R = mutate_color(this->gene.color.R);
     this->gene.color.G = mutate_color(this->gene.color.G);
@@ -227,7 +229,7 @@ void Host::update(std::vector<Food>& foods, int *number_of_living_hosts) {
     }
 
     //Every time you update you lose energy
-    this->decrease_energy(CONFIG["ENERGY_LOSS_PER_TICK"]);
+    this->decrease_energy(calculate_energy_loss());
 
     if(should_host_die(number_of_living_hosts)) {
         this->state = DEAD;

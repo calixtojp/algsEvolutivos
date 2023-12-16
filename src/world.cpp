@@ -8,12 +8,11 @@
 #include "world.h"
 
 void World::update() {
-    // Display all the food
+    // Display the food
     for (const auto& food : this->Foods) {
         food.show_food();
     }
 
-    //Update all the hosts
     for (auto it : this->Hosts) {
         it->update(this->Foods, &this->number_of_living_hosts);
     }
@@ -80,7 +79,7 @@ void World::create_initial_population(std::vector<Host*>& Hosts, int hosts_qty) 
 Host *World::reproduce_hosts(Host *parent_1, Host *parent_2) {
     gene_t gene;
     Host *host;
-    float aggressiveness;
+    float aggressiveness, speed;
     gene.color.R = (parent_1->gene.color.R + parent_2->gene.color.R) / 2;
     gene.color.G = (parent_1->gene.color.G + parent_2->gene.color.G) / 2;
     gene.color.B = (parent_1->gene.color.B + parent_2->gene.color.B) / 2;
@@ -91,8 +90,9 @@ Host *World::reproduce_hosts(Host *parent_1, Host *parent_2) {
     gene.fov = (parent_1->gene.fov + parent_2->gene.fov) / 2;
 
     aggressiveness = (parent_1->aggressiveness + parent_2->aggressiveness) / 2;
+    speed = (parent_1->speed + parent_2->speed) / 2;
 
-    host = new Host(aggressiveness, gene, parent_1->pos);
+    host = new Host(aggressiveness, speed, gene, parent_1->pos);
 
     return host;
 }
