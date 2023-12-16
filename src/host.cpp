@@ -125,8 +125,8 @@ void Host::increase_energy(Food *food) {
 
 float Host::calculate_energy_loss(){
     float loss = 0;
-    loss += 10*(this->speed); // Temos q ver certinho esses fatores multiplicativos ainda
-    
+    loss += 5*(this->speed); // Temos q ver certinho esses fatores multiplicativos ainda
+    loss += (this->gene.shape.h) / 4;
     return loss;
 }
 
@@ -156,8 +156,8 @@ void Host::mutate() {
     if(coin_toss())
         factor = -1;
 
-    //this->gene.shape.h = abs(this->gene.shape.h * (1 + factor * CONFIG["MUTATION_MULTIPLICATIVE_MODIFIER"]));
-    //this->gene.shape.w = abs(this->gene.shape.w * (1 + factor * CONFIG["MUTATION_MULTIPLICATIVE_MODIFIER"]));
+    this->gene.shape.h = abs(this->gene.shape.h * (1 + factor * CONFIG["MUTATION_MULTIPLICATIVE_MODIFIER"]));
+    this->gene.shape.w = abs(this->gene.shape.w * (1 + factor * CONFIG["MUTATION_MULTIPLICATIVE_MODIFIER"]));
 
     this->gene.color.R = mutate_color(this->gene.color.R);
     this->gene.color.G = mutate_color(this->gene.color.G);
