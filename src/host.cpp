@@ -58,6 +58,41 @@ void Host::show_energy_graphically(void){
     glEnd();// Fala para o OpenGL que terminou de enviar os vértices do polígono
 }
 
+void Host::show_fov_graphically(void){
+
+    // glClear(GL_COLOR_BUFFER_BIT);
+
+    glColor3f(0.0, 0.0, 0.0); // Defina a cor do perímetro (preto no exemplo)
+
+    glBegin(GL_LINE_LOOP); // Use GL_LINE_LOOP para desenhar o perímetro
+    glVertex2f(this->pos.x-this->gene.fov, this->pos.y-this->gene.fov); // Vértice inferior esquerdo
+    glVertex2f(this->pos.x+this->gene.fov, this->pos.y-this->gene.fov);  // Vértice inferior direito
+    glVertex2f(this->pos.x+this->gene.fov, this->pos.y+this->gene.fov);   // Vértice superior direito
+    glVertex2f(this->pos.x-this->gene.fov, this->pos.y+this->gene.fov);  // Vértice superior esquerdo
+    glEnd();
+
+    // glFlush();
+}
+
+void Host::show_aggression_graphically(void){
+    glColor3f(1, 0, 0);//Energia será azul
+    glBegin(GL_POLYGON);// Fala para o OpenGL que os próximos pontos serão para desenhar um polígono
+
+    float agress_ratio = this->aggressiveness / CONFIG["AGGRESSIVENESS_THRESHHOLD"];
+
+    // Adicionada cada vértice do retângulo:
+    //Inferior esquerdo:
+    glVertex2d(this->pos.x-this->gene.shape.w/2, this->pos.y+this->gene.shape.h/4);
+    //Superior esquerdo:
+    glVertex2d(this->pos.x-this->gene.shape.w/2, this->pos.y+this->gene.shape.h/2);
+    //Superior direito:
+    glVertex2d(this->pos.x-this->gene.shape.w/2 + this->gene.shape.w*agress_ratio, this->pos.y+this->gene.shape.h/2);
+    //Inferior direito:
+    glVertex2d(this->pos.x-this->gene.shape.w/2 + this->gene.shape.w*agress_ratio, this->pos.y+this->gene.shape.h/4);
+
+    glEnd();// Fala para o OpenGL que terminou de enviar os vértices do polígono
+}
+
 void Host::show_host(void){
     // Vai desenhar um polígono de 4 vértices
 
@@ -75,8 +110,12 @@ void Host::show_host(void){
     glVertex2d(this->pos.x+this->gene.shape.w/2, this->pos.y-this->gene.shape.h/2);
 
     glEnd();// Fala para o OpenGL que terminou de enviar os vértices do polígono
-    
+
     this->show_energy_graphically();
+
+    this->show_fov_graphically();
+
+    this->show_aggression_graphically();
 }
 
 void Host::move_up(void){
