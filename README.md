@@ -1,64 +1,32 @@
-# Características principais
-## Recursos finitos
-Ao longo da simulação, "comidas" irão aparecer e os hospedeiros poderão capturar essa comida.
-Quando um ou mais hospedeiros chegarem perto suficiente da comida, um tempo "para comer" será
-iniciado. Se somente um hospedeiro conseguir chegar sozinho e comer a comida, somente esse
-irá capturar a comida. Se algum outro hospedeiro chegar na comida enquanto outro hospedeiro estava
-comendo, então irá acontecer uma disputa pelo recurso. Dependendo do tipo de meme que infecta o
-hospedeiro, há a possibilidade de dividir totalmente ou parcialmente a comida. Quando um hospedeiro
-ópta por não divir a comida, há maior probabilidade de que ambos os hospedeiros fiquem sem a comida. Quando um hospedeiro ópta pela divisão, há maior probabilidade de que esse fique com a comida. Além disso, um hospedeiro que ópta por ser mais agressivo (não dividir) terá de pagar essa operação com pontos de energia. Assim, conseguimos simular a relação de agressividade com a relação de disputa por recursos finitos.
+# Inspirações para projeto
 
-## Comunicação entre hospedeiros
-Quando dois ou mais hospedeiros chegam perto suficiente, há a possibilidade de que um meme seja passado (ou misturado) com outro meme do outro hospedeiro. Isso irá depender a viralidade do meme.
+## Teoria memética
+Este projeto é inspirado na teoria memética de Richard Dawkins, que postula que as ideias, ou "memes" (unidades básicas de informações culturais), evoluem e se espalham através de um processo semelhante à seleção natural biológica. No contexto desta simulação, o objetivo é modelar a evolução dos memes e de seus portadores dentro de uma população de hospedeiros, onde os memes influenciam o comportamento dos hospedeiros e, em última análise, a sua sobrevivência.
+### Reprodução dos memes:
+Os memes que aumentam as chances de sobrevivência e reprodução de um hospedeiro têm maior probabilidade de serem replicados e transmitidos às gerações subsequentes. Na simulação, os memes bem-sucedidos são aqueles que contribuem positivamente para a capacidade de um hospedeiro encontrar e garantir alimentos, navegar no seu ambiente e envolver-se em disputas com outros hospedeiros.
+### Seleção Natural de Hospedeiros
+À medida que os hospedeiros interagem com o seu ambiente, aqueles com memes que se alinham com os desafios que enfrentam têm maior probabilidade de sobreviver e reproduzir-se. A _sobrevivência dos hospedeiros está diretamente ligada ao sucesso dos memes_ que carregam.
+## Teoria dos jogos
+A teoria dos jogos ajuda a _modelar essas interações considerando as escolhas_ que os hospedeiros fazem, influenciadas pelas variáveis do meme. Os resultados dessas interações dependem da interação entre as características do meme e os _custos de energia associados_. Por exemplo, aumentar a agressividade leva ao maior custo energético. Desse modo, toda decisão comportamental está atrelada a um tradoff relativo.
+## Equilíbrio de Nash
+O equilíbrio de Nash representa um estado em que _nenhum hospedeiro individual tem um incentivo para mudar unilateralmente a sua estratégia_, dadas as estratégias escolhidas pelos outros hospedeiros. No contexto do projeto, _as estratégias são influenciadas pelas variáveis do meme_ e seus respectivos custos energéticos. O que queremos aferir é _o estado o qual há uma estabilização dos mecanismos de tomada de decisão_ dada uma condição ambiental.
 
-## Reprodução dos hospedeiros (sexuada ou assexuada)
-(em aberto)
+# Implementação do projeto
+## Arquitetura
+O projeto foi desenvolvido completamente em C++, onde foram construídas as classes Host, Meme, Food e World. A Classe Host implementa a Classe Meme além de lidar com as características fundamentais do Host (como movimentação, tamanho, cor, etc...). Já a Classe Food foi construída para interagir com os hospedeiros e dar-lhes energia quando conseguem o alimento. Além disso, a classe Food também implementa o timer de cada comida e indica quando esta está sendo disputada por mais de um Host. Já à Classe World é atribuída a função de gerar a simulação bem como implementar os algoritmos evolutivos.
+## Funcionamento das simulações
+### População inicial
+Ao longo de uma simulação será gerada uma _população inicial aleatória_ de Hosts com características físicas aleatórias e cada um com um meme aleatório em relação às características de _mecanismos de decisão_ (velocidade, agressividade, etc...). 
+### Sobrevivência
+Os Hosts são livres para se movimentar até que encontrem um alimento. Quando encontrarem um alimento, o Host terá um tempo determinado para comer aquele alimento, _se outro Host encontrar o mesmo alimento, então eles irão disputar aquela comida_. 
+### Disputa
+As condições de _disputa serão diretamente ligadas aos memes que infectam_ determinados hosts. Por exemplo, se dois hosts agressivos se encontrarem, os dois sairão prejudicados pois provavelmente vão gastar mais energia disputando a comida do que a própria comida pode oferecer. Se dois hosts passivos encontrarem a comida, então os dois irão partilhar a comida. Se um Host fica com a energia muito baixa, então ele morre.
+### Fim da geração e fitness
+Quando uma porção da população morre (por padrão 1/5), então algum algorítmo de seleção será ativado para reproduzir os Hosts a partir dos sobreviventes. _Um Host será considerado hápto se tiver mais energia restante que os demais._
+### Geração de uma nova geração
+Quando ocorre a reprodução, um Host gerado _irá herdar a combinação física de seus pais_ bem como _irá receber um meme oriundo da combinação dos memes_ de seus pais.
 
-## Reprodução dos memes (assexuada)
-(em aberto)
-
-# Classe hospedeiro
-Essa classe terá seu comportamento definito pelo "meme" que a infecta. Ou seja,
-um hospedeiro será mais agressivo, ou terá maior taxa de reprodução, ou terá
-mais velocidade a depender das características do parasita (meme) que a infecta.
-
-Será representado por um retângulo na simulação (retângulos são mais "leves" computacionalmente que círculos).
-
-## Métodos principais
-Seus principais métodos estão relacionados à natureza do funcionamento de um hospedeiro.
-Fazendo o paralelo humano, será como definir "movimento dos braços", "processo de digestão"
-, etc... Em suma, seus métodos dizem respeito ao funcionamento intríseco do hospedeiro em questão.
-
-## Variáveis principais
-Suas principais variáveis dizem respeito às variáveis intrísecas ao funcionamento do hospedeiro.
-Voltando no exemplo humano acima, enquanto o método "mover braço" deveria estar relacionado
-ao movimento do braço, quem irá ditar o comprimento do braço será as variáveis do hospedeiro.
-
-### Posição
-### Cor
-
-# Classe meme
-De onde vem 'meme'? meme é um termo que surge no livro "Gene egoísta" de Richard Dawkins, em 1976.
-Meme, no sentido do livro, seria uma unidade de informação com capacidade de se multiplicar 
-através das crenças de indivíduo para indivíduo. Para mais informações, pesquisar sobre
-"teoria memética".
-
-Essa classe será parte de um hospedeiro. Ela deverá modelar o comportamento de um hospedeiro.
-Essa classe será o alvo principal do algoritmo evolutivo. Para lidar com a evolução dos memes,
-vamos simular um ambiente de concorrência por recursos finitos, de tal forma que os hospedeiros
-deverão "fazer escolhas" de tal forma que aqueles que melhor escolherem alocar seus "recursos"
-irão sobreviver e se reproduzir levando assim à seleção de melhores "memes".
-
-Para simular a ideia de reprodução dos memes entre a população de hospedeiros, vamos fazer com que
-esses hospedeiros tenham uma espécie de "comunicação". Quando um hospedeiro chegar perto suficiente
-de outro, o meme que infecta um irá misturar com o meme que infecta o outro. Dessa forma, podemos
-simular a troca de informações dentro de uma comunidade de hospedeiros.
-
-## Métodos principais
-## Variáveis principais
-### Velocidade
-### Tamanho
-### Agressividade
-### Taxa de reprodução
-
-
+# Conclusões do projeto
+## Comportamentos predominantes
+## Comportamentos em escassez de alimentos
+## Comportamentos com maior gasto energético
