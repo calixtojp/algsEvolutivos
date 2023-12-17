@@ -334,40 +334,31 @@ bool Host::findFoodInVision(std::vector<Food>& foods) {
 }
 
 void Host::goTo(position_t position) {
-    float x_factor = position.x - this->pos.x;
-    float y_factor = position.y - this->pos.y;
-    std::stack<enum Direction> directions;
-    
-    if(x_factor > 0)
-        directions.push(RIGHT);
-    else
-        directions.push(LEFT);
-    
-    if(y_factor > 0)
-        directions.push(UP);
-    else
-        directions.push(DOWN);
+    float dx = position.x - this->pos.x;
+    float dy = position.y - this->pos.y;
 
-    while(directions.size() > 0) {
-        switch (directions.top()) {
-            case LEFT:
-                this->move_left();
-                break;
-            case RIGHT:
-                this->move_right();
-                break;
-            case UP:
-                this->move_up();       
-                break;
-            case DOWN:
-                this->move_down();
-                break;
-            default:
-                break;
-        }
-        directions.pop();
+    if(abs(dx) < 0.05)
+        dx = 0;
+    if(abs(dy) < 0.05)
+        dy = 0;
+
+    float d = sqrt(dx*dx + dy*dy);
+
+    if (d > 0) {
+        float cos = dx / d;
+        float sin = dy / d;
+
+        this->pos.x += this->speed * cos;
+        this->pos.y += this->speed * sin;
     }
+
+    if (this->pos.x < -1) this->pos.x = -1;
+    else if (this->pos.x > 1) this->pos.x = 1;
+
+    if (this->pos.y < -1) this->pos.y = -1;
+    else if (this->pos.y > 1) this->pos.y = 1;
 }
+
 
 void Host::goToFood() {
     this->goTo({ this->currentFood->getX(), this->currentFood->getY() });
