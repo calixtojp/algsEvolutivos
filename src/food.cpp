@@ -61,9 +61,8 @@ bool Food::eatingHostsEmpty(){
     return false;
 }
 
-bool Food::eatingHostsValue(long unsigned int value){
-    if(eatingHosts.size() == value) return true;
-    return false;
+int Food::eatingHostsSize(){
+    return eatingHosts.size();
 }
 
 // cruzamento dos memes de hosts comendo a mesma comida

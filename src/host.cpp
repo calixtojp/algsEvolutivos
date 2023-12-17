@@ -26,7 +26,7 @@ void Host::change_color(float new_R, float new_G, float new_B){
 }
 
 void Host::show_characteristics(){
-    printf("x:%.2f | y:%.2f | h:%.3f | w:%.3f | RGB(%.2f,%.2f,%.2f) | speed:%.3f | fov:%.3f\n",
+    printf("x:%.2f | y:%.2f | h:%.3f | w:%.3f | RGB(%.2f,%.2f,%.2f) | speed:%.3f | fov:%.3f | agr:%.3f\n",
         this->pos.x,
         this->pos.y,
         this->gene.shape.h,
@@ -35,7 +35,8 @@ void Host::show_characteristics(){
         this->gene.color.G,
         this->gene.color.B,
         this->speed,
-        this->gene.fov
+        this->gene.fov,
+        this->aggressiveness
     );
 }
 
@@ -249,13 +250,20 @@ void Host::update(std::vector<Food>& foods, int *number_of_living_hosts) {
     switch (this->state) {
         case LOOKING_FOR_FOOD: {
             position_t random = { generate_random(-1, 1), generate_random(-1, 1) };
-            if(this->random_movement_timer == 0) {
+            // if(this->random_movement_timer == 0) {
+            //     this->random_movement_timer = CONFIG["RANDOM_MOVEMENT_TIMER"];
+            // }
+            // if(this->random_movement_timer == CONFIG["RANDOM_MOVEMENT_TIMER"]) {
+            //     this->going_to = random;
+            // }
+
+            this->random_movement_timer--;
+
+            if(this->comparePositionsWithTolerance(this->going_to, this->pos, 0.05) || 
+                this->random_movement_timer == 0) {
+                this->going_to = random;
                 this->random_movement_timer = CONFIG["RANDOM_MOVEMENT_TIMER"];
             }
-            if(this->random_movement_timer == CONFIG["RANDOM_MOVEMENT_TIMER"]) {
-                this->going_to = random;
-            }
-            this->random_movement_timer--;
 
             this->goTo(this->going_to);
             if(findFoodInVision(foods))
@@ -338,19 +346,21 @@ void Host::battle(Food *food) {
     if(food == NULL)
         return;
 
-    if(!food->eatingHostsEmpty() || !food->eatingHostsValue(1)){
-        printf("battle happening: ");
-        host2 = food->getFirstHost();
+    if(food->eatingHostsSize() > 1){
+        int h = generate_random_integer(0, (food->eatingHostsSize()) - 2);
+        host2 = food->getHost(h);
         if(coin > 0.5){
             energy = host2->energy / 2;
             this->energy += energy;
+            if (this->energy > CONFIG["MAX_ENERGY"])
+                this->energy = CONFIG["MAX_ENERGY"];
             host2->energy -= energy;
-            printf("challenger won %d in energy\n", energy);
         } else {
             energy = this->energy / 2;
             this->energy -= energy;
             host2->energy += energy;
-            printf("challenged won %d in energy\n", energy);
+            if (host2->energy > CONFIG["MAX_ENERGY"])
+                host2->energy = CONFIG["MAX_ENERGY"];
         }
     }
 }
@@ -373,39 +383,36 @@ bool Host::findFoodInVision(std::vector<Food>& foods) {
 }
 
 void Host::goTo(position_t position) {
-    float x_factor = position.x - this->pos.x;
-    float y_factor = position.y - this->pos.y;
-    std::stack<enum Direction> directions;
-    
-    if(x_factor > 0)
-        directions.push(RIGHT);
-    else
-        directions.push(LEFT);
-    
-    if(y_factor > 0)
-        directions.push(UP);
-    else
-        directions.push(DOWN);
+    float dx = position.x - this->pos.x;
+    float dy = position.y - this->pos.y;
 
-    while(directions.size() > 0) {
-        switch (directions.top()) {
-            case LEFT:
-                this->move_left();
-                break;
-            case RIGHT:
-                this->move_right();
-                break;
-            case UP:
-                this->move_up();       
-                break;
-            case DOWN:
-                this->move_down();
-                break;
-            default:
-                break;
-        }
-        directions.pop();
+    if(abs(dx) < 0.05)
+        dx = 0;
+    if(abs(dy) < 0.05)
+        dy = 0;
+
+    float d = sqrt(dx*dx + dy*dy);
+
+    if (d > 0) {
+        float cos = dx / d;
+        float sin = dy / d;
+
+        this->pos.x += this->speed * cos;
+        this->pos.y += this->speed * sin;
     }
+
+    float halfWidth = this->gene.shape.w / 2;
+    float halfHeight = this->gene.shape.h / 2;
+
+    if (this->pos.x - halfWidth < -1) 
+        this->pos.x = -1 + halfWidth;
+    else if (this->pos.x + halfWidth > 1) 
+        this->pos.x = 1 - halfWidth;
+
+    if (this->pos.y - halfHeight < -1) 
+        this->pos.y = -1 + halfHeight;
+    else if (this->pos.y + halfHeight > 1) 
+        this->pos.y = 1 - halfHeight;
 }
 
 void Host::goToFood() {
@@ -432,4 +439,8 @@ bool Host::hasFoundFood() {
         return true;
     }
     return false;
+}
+
+bool Host::comparePositionsWithTolerance(position_t pos1, position_t pos2, float tolerance) {
+    return abs(pos1.x - pos2.x) <= tolerance && abs(pos1.y - pos2.y) <= tolerance;
 }

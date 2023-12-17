@@ -80,7 +80,7 @@ public:
         this->gene = initialGene;
         this->random_movement_timer = CONFIG["RANDOM_MOVEMENT_TIMER"];
         this->state = LOOKING_FOR_FOOD;
-        this->show_characteristics();
+        //this->show_characteristics();
     }
 
     void change_position(float new_x, float new_y);
@@ -117,6 +117,8 @@ public:
     void goToFood();
     bool hasFoundFood();
     void battle(Food *food);
+
+    bool comparePositionsWithTolerance(position_t pos1, position_t pos2, float tolerance);
 };
 
 #endif

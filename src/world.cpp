@@ -18,8 +18,14 @@ void World::update() {
     }
 
     //std::cout << "living hosts: " << this->number_of_living_hosts << " / " << this->hosts_qtd << '\n';
-    if(this->number_of_living_hosts <= 4.0/5.0 * hosts_qtd)
+    if(this->number_of_living_hosts <= 4.0/5.0 * hosts_qtd){
         run_reproduction_algorithm();
+        printf("New group after reproduction:\n");
+        for(auto h : Hosts)
+            h->show_characteristics();
+    }
+        
+        
 }
 
 void World::run_reproduction_algorithm() {
@@ -70,9 +76,11 @@ Host *World::tournament_selection() {
 
 // Function to create and add multiple Hosts to a vector
 void World::create_initial_population(std::vector<Host*>& Hosts, int hosts_qty) {
+    printf("Original group:\n");
     for (int i = 0; i < hosts_qty; ++i) {
         Host* temp = create_initial_host();
         Hosts.push_back(temp);
+        temp->show_characteristics();
     }
 }
 

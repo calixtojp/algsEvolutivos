@@ -5,7 +5,6 @@
 #include "utils.h"
 #include "config.h"
 
-#define ENERGY_PER_FOOD_UNIT 0.5
 class Host;
 
 class Food {
@@ -22,9 +21,9 @@ private:
 public:
 
     Food(float initialX, float initialY)
-        : x(initialX), y(initialY), width(0.05f), height(0.05f), foodTimer(CONFIG["FOOD_TIMER"]) {
+        : x(initialX), y(initialY), width(CONFIG["FOOD_SHAPE"]), height(CONFIG["FOOD_SHAPE"]), foodTimer(CONFIG["FOOD_TIMER"]) {
         // Constructor code if needed
-        this->energy_per_unit = ENERGY_PER_FOOD_UNIT;
+        this->energy_per_unit = CONFIG["ENERGY_PER_FOOD_UNIT"];
     }
 
     //Operator functions:
@@ -41,7 +40,7 @@ public:
     float getHeight() const { return height; }
     int getTimer() const {return foodTimer; }
     float getEnergyPerUnit() const { return energy_per_unit; }
-    Host* getFirstHost( ) { return eatingHosts[0]; }
+    Host* getHost(int h) { return eatingHosts[h]; }
 
     // Accessors sets
     void setPosition(float newX, float newY);
@@ -60,7 +59,7 @@ public:
     void notifyTimerExpired();
 
     bool eatingHostsEmpty();
-    bool eatingHostsValue(long unsigned int value);
+    int eatingHostsSize();
 
     void contaminateHosts(Host *host);
 };
