@@ -109,6 +109,7 @@ public:
     bool should_host_die(int *number_of_living_hosts);
 
     void mutate();
+    float mutate_float_value(float value);
 
     //To perform actions
     bool eat(Food *food);

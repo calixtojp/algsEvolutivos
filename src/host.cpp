@@ -217,18 +217,27 @@ float calculate_speed_based_on_size(float speed_upper_bound, float speed_lower_b
 }
 
 void Host::mutate() {
-    int factor = 1;
-    if(coin_toss())
-        factor = -1;
-
-    this->gene.shape.h = abs(this->gene.shape.h * (1 + factor * CONFIG["MUTATION_MULTIPLICATIVE_MODIFIER"]));
-    this->gene.shape.w = abs(this->gene.shape.w * (1 + factor * CONFIG["MUTATION_MULTIPLICATIVE_MODIFIER"]));
+    this->gene.shape.h = mutate_float_value(this->gene.shape.h);
+    this->gene.shape.w = this->gene.shape.h;
 
     this->gene.color.R = mutate_color(this->gene.color.R);
     this->gene.color.G = mutate_color(this->gene.color.G);
     this->gene.color.B = mutate_color(this->gene.color.B);
 
-    this->gene.fov = abs(this->gene.fov * (1 + factor * CONFIG["MUTATION_MULTIPLICATIVE_MODIFIER"]));
+    this->gene.fov = mutate_float_value(this->gene.fov);
+}
+
+float Host::mutate_float_value(float value) {
+    int factor = 1;
+    float mutated_value;
+    
+    if(coin_toss())
+        factor = -1;
+
+    mutated_value = abs((value + factor * (CONFIG["MUTATION_ADDITIVE_MODIFIER"] / 2)) * 
+        (1 + factor * CONFIG["MUTATION_MULTIPLICATIVE_MODIFIER"]));
+
+    return mutated_value;
 }
 
 float Host::mutate_color(float color_value) {
