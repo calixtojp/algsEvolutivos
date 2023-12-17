@@ -307,8 +307,9 @@ void Host::battle(Food *food) {
     if(food == NULL)
         return;
 
-    if(!food->eatingHostsEmpty() || !food->eatingHostsValue(1)){
-        host2 = food->getFirstHost();
+    if(food->eatingHostsSize() > 1){
+        int h = generate_random_integer(0, (food->eatingHostsSize()) - 2);
+        host2 = food->getHost(h);
         if(coin > 0.5){
             energy = host2->energy / 2;
             this->energy += energy;
