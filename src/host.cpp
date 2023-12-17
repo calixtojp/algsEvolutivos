@@ -79,7 +79,7 @@ void Host::show_aggression_graphically(void){
     glColor3f(1, 0, 0);//Energia será azul
     glBegin(GL_POLYGON);// Fala para o OpenGL que os próximos pontos serão para desenhar um polígono
 
-    float agress_ratio = this->aggressiveness / CONFIG["AGGRESSIVENESS_THRESHHOLD"];
+    float agress_ratio = this->aggressiveness / CONFIG["AGGRESSIVENESS_UPPER"];
 
     // Adicionada cada vértice do retângulo:
     //Inferior esquerdo:
