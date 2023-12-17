@@ -92,6 +92,7 @@ public:
     //Show position, color and shape (terminal)
     void show_characteristics(void);
     //Display the host with openGL
+    void show_energy_graphically(void);
     void show_host(void);
 
     //Movement functions 

@@ -1,7 +1,7 @@
 # Inspirações para projeto
 
 ## Teoria memética
-Este projeto é inspirado na teoria memética de Richard Dawkins, que postula que as ideias, ou "memes" (unidades básicas de informações culturais), evoluem e se espalham através de um processo semelhante à seleção natural biológica. No contexto desta simulação, o objetivo é modelar a evolução dos memes e de seus portadores dentro de uma população de hospedeiros, onde os memes influenciam o comportamento dos hospedeiros e, em última análise, a sua sobrevivência.
+Este projeto é inspirado na teoria memética de Richard Dawkins, que postula que as ideias, ou "memes" (unidades básicas de informações culturais), evoluem e se espalham através de um processo semelhante à seleção natural biológica. No contexto desta simulação, o objetivo é _modelar a evolução dos memes e de seus portadores dentro de uma população de hospedeiros_, onde os memes influenciam o comportamento dos hospedeiros e, em última análise, a sua sobrevivência.
 ### Reprodução dos memes:
 Os memes que aumentam as chances de sobrevivência e reprodução de um hospedeiro têm maior probabilidade de serem replicados e transmitidos às gerações subsequentes. Na simulação, os memes bem-sucedidos são aqueles que contribuem positivamente para a capacidade de um hospedeiro encontrar e garantir alimentos, navegar no seu ambiente e envolver-se em disputas com outros hospedeiros.
 ### Seleção Natural de Hospedeiros

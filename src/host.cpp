@@ -39,20 +39,44 @@ void Host::show_characteristics(){
     );
 }
 
+void Host::show_energy_graphically(void){
+    glColor3f(0, 0, 1);//Energia será azul
+    glBegin(GL_POLYGON);// Fala para o OpenGL que os próximos pontos serão para desenhar um polígono
+
+    float energy_ratio = this->energy / CONFIG["MAX_ENERGY"];
+
+    // Adicionada cada vértice do retângulo:
+    //Inferior esquerdo:
+    glVertex2d(this->pos.x-this->gene.shape.w/2, this->pos.y-this->gene.shape.h/2);
+    //Superior esquerdo:
+    glVertex2d(this->pos.x-this->gene.shape.w/2, this->pos.y-this->gene.shape.h/4);
+    //Superior direito:
+    glVertex2d(this->pos.x-this->gene.shape.w/2 + this->gene.shape.w*energy_ratio, this->pos.y-this->gene.shape.h/4);
+    //Inferior direito:
+    glVertex2d(this->pos.x-this->gene.shape.w/2 + this->gene.shape.w*energy_ratio, this->pos.y-this->gene.shape.h/2);
+
+    glEnd();// Fala para o OpenGL que terminou de enviar os vértices do polígono
+}
+
 void Host::show_host(void){
     // Vai desenhar um polígono de 4 vértices
-    // this->show_characteristics();
 
     glColor3f(this->gene.color.R, this->gene.color.G, this->gene.color.B);
     glBegin(GL_POLYGON);// Fala para o OpenGL que os próximos pontos serão para desenhar um polígono
 
     // Adicionada cada vértice do retângulo
+    //Inferior esquerdo:
     glVertex2d(this->pos.x-this->gene.shape.w/2, this->pos.y-this->gene.shape.h/2);
+    //Superior esquerdo:
     glVertex2d(this->pos.x-this->gene.shape.w/2, this->pos.y+this->gene.shape.h/2);
+    //Superior direito:
     glVertex2d(this->pos.x+this->gene.shape.w/2, this->pos.y+this->gene.shape.h/2);
+    //Inferior direito:
     glVertex2d(this->pos.x+this->gene.shape.w/2, this->pos.y-this->gene.shape.h/2);
 
     glEnd();// Fala para o OpenGL que terminou de enviar os vértices do polígono
+    
+    this->show_energy_graphically();
 }
 
 void Host::move_up(void){
