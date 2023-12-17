@@ -208,13 +208,13 @@ void Host::decrease_energy(float subtracted_qtd) {
     this->energy -= subtracted_qtd;
 }
 
-/*float calculate_speed_based_on_size(float speed_upper_bound, float speed_lower_bound, 
+float calculate_speed_based_on_size(float speed_upper_bound, float speed_lower_bound, 
                                     float size_lower_bound, float size_upper_bound, float size) {
     float size_magnitude = size / (size_upper_bound - size_lower_bound);
     float speed = pow((1 / size_magnitude), 2) * (speed_upper_bound - speed_lower_bound);
 
     return speed;
-}*/
+}
 
 void Host::mutate() {
     int factor = 1;
@@ -250,12 +250,6 @@ void Host::update(std::vector<Food>& foods, int *number_of_living_hosts) {
     switch (this->state) {
         case LOOKING_FOR_FOOD: {
             position_t random = { generate_random(-1, 1), generate_random(-1, 1) };
-            // if(this->random_movement_timer == 0) {
-            //     this->random_movement_timer = CONFIG["RANDOM_MOVEMENT_TIMER"];
-            // }
-            // if(this->random_movement_timer == CONFIG["RANDOM_MOVEMENT_TIMER"]) {
-            //     this->going_to = random;
-            // }
 
             this->random_movement_timer--;
 
