@@ -211,13 +211,20 @@ void Host::update(std::vector<Food>& foods, int *number_of_living_hosts) {
     switch (this->state) {
         case LOOKING_FOR_FOOD: {
             position_t random = { generate_random(-1, 1), generate_random(-1, 1) };
-            if(this->random_movement_timer == 0) {
+            // if(this->random_movement_timer == 0) {
+            //     this->random_movement_timer = CONFIG["RANDOM_MOVEMENT_TIMER"];
+            // }
+            // if(this->random_movement_timer == CONFIG["RANDOM_MOVEMENT_TIMER"]) {
+            //     this->going_to = random;
+            // }
+
+            this->random_movement_timer--;
+
+            if(this->comparePositionsWithTolerance(this->going_to, this->pos, 0.05) || 
+                this->random_movement_timer == 0) {
+                this->going_to = random;
                 this->random_movement_timer = CONFIG["RANDOM_MOVEMENT_TIMER"];
             }
-            if(this->random_movement_timer == CONFIG["RANDOM_MOVEMENT_TIMER"]) {
-                this->going_to = random;
-            }
-            this->random_movement_timer--;
 
             this->goTo(this->going_to);
             if(findFoodInVision(foods))
@@ -354,13 +361,19 @@ void Host::goTo(position_t position) {
         this->pos.y += this->speed * sin;
     }
 
-    if (this->pos.x < -1) this->pos.x = -1;
-    else if (this->pos.x > 1) this->pos.x = 1;
+    float halfWidth = this->gene.shape.w / 2;
+    float halfHeight = this->gene.shape.h / 2;
 
-    if (this->pos.y < -1) this->pos.y = -1;
-    else if (this->pos.y > 1) this->pos.y = 1;
+    if (this->pos.x - halfWidth < -1) 
+        this->pos.x = -1 + halfWidth;
+    else if (this->pos.x + halfWidth > 1) 
+        this->pos.x = 1 - halfWidth;
+
+    if (this->pos.y - halfHeight < -1) 
+        this->pos.y = -1 + halfHeight;
+    else if (this->pos.y + halfHeight > 1) 
+        this->pos.y = 1 - halfHeight;
 }
-
 
 void Host::goToFood() {
     this->goTo({ this->currentFood->getX(), this->currentFood->getY() });
@@ -386,4 +399,8 @@ bool Host::hasFoundFood() {
         return true;
     }
     return false;
+}
+
+bool Host::comparePositionsWithTolerance(position_t pos1, position_t pos2, float tolerance) {
+    return abs(pos1.x - pos2.x) <= tolerance && abs(pos1.y - pos2.y) <= tolerance;
 }

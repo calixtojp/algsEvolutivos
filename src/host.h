@@ -115,6 +115,8 @@ public:
     void goToFood();
     bool hasFoundFood();
     void battle(Food *food);
+
+    bool comparePositionsWithTolerance(position_t pos1, position_t pos2, float tolerance);
 };
 
 #endif
