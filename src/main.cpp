@@ -34,7 +34,7 @@ void OpenGlSetup(int *argc, char** argv);
 int main(int argc, char** argv){
     CONFIG = readConfig(".conf");
     
-    world = new World(CONFIG["POPULATION_SIZE"]);
+    world = new World(CONFIG["POPULATION_SIZE"], CONFIG["FOOD_AMOUNT"]);
 
     OpenGlSetup(&argc, argv);
 

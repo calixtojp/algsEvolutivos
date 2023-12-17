@@ -17,15 +17,16 @@ class World {
     
 
     int hosts_qtd;
+    int food_qtd;
     int number_of_living_hosts;
     int generation;
 
 public:
 
 
-    World(int hosts_qtd) : hosts_qtd(hosts_qtd) {
+    World(int hosts_qtd, int food_qtd) : hosts_qtd(hosts_qtd), food_qtd(food_qtd) {
         create_initial_population(this->Hosts, this->hosts_qtd);
-        create_food_population((this->Foods), this->hosts_qtd / 2);
+        create_food_population((this->Foods), this->food_qtd);
         this->number_of_living_hosts = this->hosts_qtd;
     }
 

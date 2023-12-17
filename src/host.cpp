@@ -26,7 +26,7 @@ void Host::change_color(float new_R, float new_G, float new_B){
 }
 
 void Host::show_characteristics(){
-    printf("x:%.2f | y:%.2f | h:%.3f | w:%.3f | RGB(%.2f,%.2f,%.2f) | speed:%.3f | fov:%.3f\n",
+    printf("x:%.2f | y:%.2f | h:%.3f | w:%.3f | RGB(%.2f,%.2f,%.2f) | speed:%.3f | fov:%.3f | agr:%.3f\n",
         this->pos.x,
         this->pos.y,
         this->gene.shape.h,
@@ -35,7 +35,8 @@ void Host::show_characteristics(){
         this->gene.color.G,
         this->gene.color.B,
         this->speed,
-        this->gene.fov
+        this->gene.fov,
+        this->aggressiveness
     );
 }
 
@@ -300,18 +301,19 @@ void Host::battle(Food *food) {
         return;
 
     if(!food->eatingHostsEmpty() || !food->eatingHostsValue(1)){
-        printf("battle happening: ");
         host2 = food->getFirstHost();
         if(coin > 0.5){
             energy = host2->energy / 2;
             this->energy += energy;
+            if (this->energy > CONFIG["MAX_ENERGY"])
+                this->energy = CONFIG["MAX_ENERGY"];
             host2->energy -= energy;
-            printf("challenger won %d in energy\n", energy);
         } else {
             energy = this->energy / 2;
             this->energy -= energy;
             host2->energy += energy;
-            printf("challenged won %d in energy\n", energy);
+            if (host2->energy > CONFIG["MAX_ENERGY"])
+                host2->energy = CONFIG["MAX_ENERGY"];
         }
     }
 }
