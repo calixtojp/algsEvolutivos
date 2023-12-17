@@ -41,6 +41,7 @@ public:
     float getHeight() const { return height; }
     int getTimer() const {return foodTimer; }
     float getEnergyPerUnit() const { return energy_per_unit; }
+    Host* getFirstHost( ) { return eatingHosts[0]; }
 
     // Accessors sets
     void setPosition(float newX, float newY);
@@ -59,6 +60,7 @@ public:
     void notifyTimerExpired();
 
     bool eatingHostsEmpty();
+    bool eatingHostsValue(long unsigned int value);
 
     void contaminateHosts(Host *host);
 };

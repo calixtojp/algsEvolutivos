@@ -196,19 +196,24 @@ void Host::update(std::vector<Food>& foods, int *number_of_living_hosts) {
             this->goTo(this->going_to);
             if(findFoodInVision(foods))
                 this->state = GOING_TO_FOOD;
+                
             break;
         }
         case GOING_TO_FOOD:
             this->goToFood();
-            if(this->hasFoundFood())
+            if(this->hasFoundFood()){
                 this->state = EATING;
+                if(this->energy / 100 < this->aggressiveness)
+                        this->state = TARGETING;
+            }
             break;
         case EATING:
             if(!this->eat(currentFood))
                 this->state = LOOKING_FOR_FOOD;
             break;
         case TARGETING:
-            /* code */
+            this->kill(currentFood);
+            this->state = EATING;
             break;
         case TARGETED:
             /* code */
@@ -259,6 +264,31 @@ bool Host::eat(Food *food) {
         // Optionally, you can reset the timer or perform other actions
     }
     return true;
+}
+
+void Host::kill(Food *food) {
+    Host *host2;
+    float coin = generate_random(0, 1);
+    int energy;
+
+    if(food == NULL)
+        return;
+
+    if(!food->eatingHostsEmpty() || !food->eatingHostsValue(1)){
+        printf("battle happening: ");
+        host2 = food->getFirstHost();
+        if(coin > 0.5){
+            energy = host2->energy / 2;
+            this->energy += energy;
+            host2->energy -= energy;
+            printf("challenger won %d in energy\n", energy);
+        } else {
+            energy = this->energy / 2;
+            this->energy -= energy;
+            host2->energy += energy;
+            printf("challenged won %d in energy\n", energy);
+        }
+    }
 }
 
 bool Host::findFoodInVision(std::vector<Food>& foods) {

@@ -115,6 +115,7 @@ public:
     void goTo(position_t position);
     void goToFood();
     bool hasFoundFood();
+    void kill(Food *food);
 };
 
 #endif
