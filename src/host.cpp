@@ -301,7 +301,7 @@ bool Host::eat(Food *food) {
 
 void Host::battle(Food *food) {
     Host *host2;
-    float coin = generate_random(0, 1);
+    
     int energy;
 
     if(food == NULL)
@@ -310,7 +310,7 @@ void Host::battle(Food *food) {
     if(food->eatingHostsSize() > 1){
         int h = generate_random_integer(0, (food->eatingHostsSize()) - 2);
         host2 = food->getHost(h);
-        if(coin > 0.5){
+        if(this->gene.shape.h > host2->gene.shape.h){
             energy = host2->energy / 2;
             this->energy += energy;
             if (this->energy > CONFIG["MAX_ENERGY"])
