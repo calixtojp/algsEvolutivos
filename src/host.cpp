@@ -149,8 +149,9 @@ void Host::increase_energy(Food *food) {
 
 float Host::calculate_energy_loss(){
     float loss = 0;
-    loss += 5*(this->speed); // Temos q ver certinho esses fatores multiplicativos ainda
-    loss += (this->gene.shape.h) / 4;
+    loss += CONFIG["ENERGY_LOSS_MODIFIER_SPEED"] * (this->speed);
+    loss += CONFIG["ENERGY_LOSS_MODIFIER_SHAPE"] * (this->gene.shape.h);
+    loss += CONFIG["ENERGY_LOSS_MODIFIER_FOV"] * (this->gene.fov);
     return loss;
 }
 
