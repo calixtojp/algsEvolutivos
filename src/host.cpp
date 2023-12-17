@@ -212,7 +212,7 @@ void Host::update(std::vector<Food>& foods, int *number_of_living_hosts) {
                 this->state = LOOKING_FOR_FOOD;
             break;
         case TARGETING:
-            this->kill(currentFood);
+            this->battle(currentFood);
             this->state = EATING;
             break;
         case TARGETED:
@@ -266,7 +266,7 @@ bool Host::eat(Food *food) {
     return true;
 }
 
-void Host::kill(Food *food) {
+void Host::battle(Food *food) {
     Host *host2;
     float coin = generate_random(0, 1);
     int energy;
