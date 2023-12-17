@@ -50,8 +50,6 @@ class Host : public Meme {
 private:
     // Keep track of the currently interacting food
     Food* currentFood;
-    
-    float fitness;
 
     float mutate_color(float color_value);
     bool coin_toss();
