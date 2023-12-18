@@ -79,7 +79,7 @@ void Host::show_aggression_graphically(void){
     glColor3f(1, 0, 0);//Energia será azul
     glBegin(GL_POLYGON);// Fala para o OpenGL que os próximos pontos serão para desenhar um polígono
 
-    float agress_ratio = this->aggressiveness / CONFIG["AGGRESSIVENESS_UPPER"];
+    float agress_ratio = this->aggressiveness / CONFIG["AGGRESSIVENESS_TRESHHOLD"];
 
     // Adicionada cada vértice do retângulo:
     //Inferior esquerdo:
@@ -222,9 +222,14 @@ void Host::mutate() {
     this->gene.shape.h = mutate_float_value(this->gene.shape.h);
     this->gene.shape.w = this->gene.shape.h;
 
+    this->speed = calculate_speed_based_on_size(CONFIG["SPEED_UPPER"], CONFIG["SPEED_LOWER"], 
+            CONFIG["SHAPE_LOWER"], CONFIG["SHAPE_UPPER"], this->gene.shape.h);
+
     this->gene.color.R = mutate_color(this->gene.color.R);
     this->gene.color.G = mutate_color(this->gene.color.G);
     this->gene.color.B = mutate_color(this->gene.color.B);
+
+    this->aggressiveness = mutate_float_value(this->aggressiveness);
 
     this->gene.fov = mutate_float_value(this->gene.fov);
 }
@@ -293,7 +298,8 @@ void Host::update(std::vector<Food>& foods, int *number_of_living_hosts) {
             this->state = EATING;
             break;
         case TARGETED:
-            /* code */
+            if(currentFood == NULL || (currentFood != NULL && currentFood->getTimer() <= 0))
+                this->state = LOOKING_FOR_FOOD;
             break;
         case ATTACKING:
             /* code */
@@ -360,12 +366,14 @@ void Host::battle(Food *food) {
             if (this->energy > CONFIG["MAX_ENERGY"])
                 this->energy = CONFIG["MAX_ENERGY"];
             host2->energy -= energy;
+            //host2->state = TARGETED;
         } else {
             energy = this->energy / 2;
             this->energy -= energy;
             host2->energy += energy;
             if (host2->energy > CONFIG["MAX_ENERGY"])
                 host2->energy = CONFIG["MAX_ENERGY"];
+            //this->state = TARGETED;
         }
     }
 }
