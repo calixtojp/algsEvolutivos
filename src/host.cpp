@@ -9,22 +9,26 @@
 
 int seed = 0;
 
+// Changes host position
 void Host::change_position(float new_x, float new_y){
     this->pos.x = new_x;
     this->pos.y = new_y;
 }
 
+// Changes host shape
 void Host::change_shape(float new_h, float new_w){
     this->gene.shape.h = new_h;
     this->gene.shape.w = new_w;
 }
 
+// Changes host color
 void Host::change_color(float new_R, float new_G, float new_B){
     this->gene.color.R = new_R;
     this->gene.color.G = new_G;
     this->gene.color.B = new_B;
 }
 
+// Show host characteristics
 void Host::show_characteristics(){
     printf("x:%.2f | y:%.2f | h:%.3f | w:%.3f | RGB(%.2f,%.2f,%.2f) | speed:%.3f | fov:%.3f | agr:%.3f\n",
         this->pos.x,
@@ -40,77 +44,81 @@ void Host::show_characteristics(){
     );
 }
 
+// Show energy bar in the simulation
 void Host::show_energy_graphically(void){
-    glColor3f(0, 0, 1);//Energia será azul
-    glBegin(GL_POLYGON);// Fala para o OpenGL que os próximos pontos serão para desenhar um polígono
+    glColor3f(0, 0, 1);//Energy will be blue
+    glBegin(GL_POLYGON);// Tells OpenGL that the next points will be used to draw a polygon
 
     float energy_ratio = this->energy / CONFIG["MAX_ENERGY"];
 
-    // Adicionada cada vértice do retângulo:
-    //Inferior esquerdo:
+    // Added each vertex of the rectangle:
+    //Bottom left:
     glVertex2d(this->pos.x-this->gene.shape.w/2, this->pos.y-this->gene.shape.h/2);
-    //Superior esquerdo:
+    //Upper left:
     glVertex2d(this->pos.x-this->gene.shape.w/2, this->pos.y-this->gene.shape.h/4);
-    //Superior direito:
+    //Upper right:
     glVertex2d(this->pos.x-this->gene.shape.w/2 + this->gene.shape.w*energy_ratio, this->pos.y-this->gene.shape.h/4);
-    //Inferior direito:
+    //Bottom right:
     glVertex2d(this->pos.x-this->gene.shape.w/2 + this->gene.shape.w*energy_ratio, this->pos.y-this->gene.shape.h/2);
 
-    glEnd();// Fala para o OpenGL que terminou de enviar os vértices do polígono
+    glEnd();// Tell OpenGL that it has finished sending the polygon vertices
 }
 
+// Show field of view in the simulation
 void Host::show_fov_graphically(void){
 
     // glClear(GL_COLOR_BUFFER_BIT);
 
-    glColor3f(0.0, 0.0, 0.0); // Defina a cor do perímetro (preto no exemplo)
+    glColor3f(0.0, 0.0, 0.0); // Define perimeter's color (black in this case)
 
-    glBegin(GL_LINE_LOOP); // Use GL_LINE_LOOP para desenhar o perímetro
-    glVertex2f(this->pos.x-this->gene.fov, this->pos.y-this->gene.fov); // Vértice inferior esquerdo
-    glVertex2f(this->pos.x+this->gene.fov, this->pos.y-this->gene.fov);  // Vértice inferior direito
-    glVertex2f(this->pos.x+this->gene.fov, this->pos.y+this->gene.fov);   // Vértice superior direito
-    glVertex2f(this->pos.x-this->gene.fov, this->pos.y+this->gene.fov);  // Vértice superior esquerdo
+    glBegin(GL_LINE_LOOP); // Use GL_LINE_LOOP to draw the perimeter
+    glVertex2f(this->pos.x-this->gene.fov, this->pos.y-this->gene.fov); // Bottom left vertex
+    glVertex2f(this->pos.x+this->gene.fov, this->pos.y-this->gene.fov);  // Bottom right vertex
+    glVertex2f(this->pos.x+this->gene.fov, this->pos.y+this->gene.fov);   // Upper right vertex
+    glVertex2f(this->pos.x-this->gene.fov, this->pos.y+this->gene.fov);  // Upper left vertex
     glEnd();
 
     // glFlush();
 }
 
+// Show aggression bar in the simulation
 void Host::show_aggression_graphically(void){
-    glColor3f(1, 0, 0);//Energia será azul
-    glBegin(GL_POLYGON);// Fala para o OpenGL que os próximos pontos serão para desenhar um polígono
+    glColor3f(1, 0, 0);//Aggression will be blue
+    glBegin(GL_POLYGON);// Tells OpenGL that the next points will be used to draw a polygon
 
     float agress_ratio = this->aggressiveness / CONFIG["AGGRESSIVENESS_TRESHHOLD"];
 
-    // Adicionada cada vértice do retângulo:
-    //Inferior esquerdo:
+    // Added each vertex of the rectangle:
+    //Bottom left:
     glVertex2d(this->pos.x-this->gene.shape.w/2, this->pos.y+this->gene.shape.h/4);
-    //Superior esquerdo:
+    //Upper left:
     glVertex2d(this->pos.x-this->gene.shape.w/2, this->pos.y+this->gene.shape.h/2);
-    //Superior direito:
+    //Upper right:
     glVertex2d(this->pos.x-this->gene.shape.w/2 + this->gene.shape.w*agress_ratio, this->pos.y+this->gene.shape.h/2);
-    //Inferior direito:
+    //Bottom right:
     glVertex2d(this->pos.x-this->gene.shape.w/2 + this->gene.shape.w*agress_ratio, this->pos.y+this->gene.shape.h/4);
 
-    glEnd();// Fala para o OpenGL que terminou de enviar os vértices do polígono
+    glEnd();// Tell OpenGL that it has finished sending the polygon vertices
 }
 
+// Show host in the simulation
 void Host::show_host(void){
-    // Vai desenhar um polígono de 4 vértices
+    // Will draw a polygon with 4 vertices
 
     glColor3f(this->gene.color.R, this->gene.color.G, this->gene.color.B);
-    glBegin(GL_POLYGON);// Fala para o OpenGL que os próximos pontos serão para desenhar um polígono
+    glBegin(GL_POLYGON);// Tells OpenGL that the next points will be used to draw a polygon
 
-    // Adicionada cada vértice do retângulo
-    //Inferior esquerdo:
+    // Added each vertex of the rectangle:
+    //Bottom left:
     glVertex2d(this->pos.x-this->gene.shape.w/2, this->pos.y-this->gene.shape.h/2);
-    //Superior esquerdo:
+    //Upper left:
     glVertex2d(this->pos.x-this->gene.shape.w/2, this->pos.y+this->gene.shape.h/2);
-    //Superior direito:
+    //Upper right:
     glVertex2d(this->pos.x+this->gene.shape.w/2, this->pos.y+this->gene.shape.h/2);
-    //Inferior direito:
+    //Bottom right:
     glVertex2d(this->pos.x+this->gene.shape.w/2, this->pos.y-this->gene.shape.h/2);
 
-    glEnd();// Fala para o OpenGL que terminou de enviar os vértices do polígono
+    glEnd();// Tell OpenGL that it has finished sending the polygon vertices
 
     this->show_energy_graphically();
 
@@ -119,6 +127,7 @@ void Host::show_host(void){
     this->show_aggression_graphically();
 }
 
+// Move the host to the positon above itself
 void Host::move_up(void){
     this->pos.y += this->speed;
     if(this->pos.y > 1){
@@ -127,18 +136,21 @@ void Host::move_up(void){
     }
 }
 
+// Move the host to the positon on the right side of itself
 void Host::move_right(void){
     this->pos.x += this->speed;
     if(this->pos.x > 1)
         this->pos.x = -1;
 }
 
+// Move the host to the positon under itself
 void Host::move_down(void){
     this->pos.y -= this->speed;
     if(this->pos.y < -1)
         this->pos.y = 1;
 }
 
+// Move the host to the positon on the left side of itself
 void Host::move_left(void){
     this->pos.x -= this->speed;
     if(this->pos.x < -1)
@@ -180,6 +192,7 @@ Host* create_initial_host() {
     return host;
 }
 
+// Increase hosts energy until it reaches a limit
 void Host::increase_energy(Food *food) {
     if(food == NULL) return;
 
@@ -187,6 +200,7 @@ void Host::increase_energy(Food *food) {
         this->energy += food->getEnergyPerUnit();
 }
 
+// Calculate host's energy loss based on charactristics
 float Host::calculate_energy_loss(){
     float loss = 0;
     loss += CONFIG["ENERGY_LOSS_MODIFIER_SPEED"] * (this->speed);
@@ -195,6 +209,7 @@ float Host::calculate_energy_loss(){
     return loss;
 }
 
+// See if host meets the requirements for dying
 bool Host::should_host_die(int *number_of_living_hosts) {
     if(this->energy <= 0 && this->state != DEAD) {
         std::cout << "running low on energy: killing host :(\n";
@@ -204,20 +219,21 @@ bool Host::should_host_die(int *number_of_living_hosts) {
     return false;
 }
 
+// Decrease hosts energy
 void Host::decrease_energy(float subtracted_qtd) {
     this->energy -= subtracted_qtd;
 }
 
+// Calculate host's speed based on its own size
 float calculate_speed_based_on_size(float speed_upper_bound, float speed_lower_bound, 
                                     float size_lower_bound, float size_upper_bound, float size) {
-    //float size_magnitude = size / (size_upper_bound - size_lower_bound);
-    //float speed = pow((1 / size_magnitude), 2) * (speed_upper_bound - speed_lower_bound);
 
     float speed = (size_upper_bound - size) / (size_upper_bound / speed_upper_bound);
 
     return speed;
 }
 
+// Mutate host's characteristics
 void Host::mutate() {
     this->gene.shape.h = mutate_float_value(this->gene.shape.h);
     this->gene.shape.w = this->gene.shape.h;
@@ -234,6 +250,7 @@ void Host::mutate() {
     this->gene.fov = mutate_float_value(this->gene.fov);
 }
 
+// Mutation of a float value
 float Host::mutate_float_value(float value) {
     int factor = 1;
     float mutated_value;
@@ -247,6 +264,7 @@ float Host::mutate_float_value(float value) {
     return mutated_value;
 }
 
+// Mutation of color
 float Host::mutate_color(float color_value) {
     int factor = 1;
     float color;
@@ -257,11 +275,13 @@ float Host::mutate_color(float color_value) {
     return color > 1 ? color - 1 : color;
 }
 
+// A coin toss mechanism for 50% probability cases
 bool Host::coin_toss() {
     int rand = generate_random_integer(0, 99);
     return rand % 2;
 }
 
+// Update host situation based on his current state
 void Host::update(std::vector<Food>& foods, int *number_of_living_hosts) {
     switch (this->state) {
         case LOOKING_FOR_FOOD: {
@@ -330,6 +350,7 @@ void Host::update(std::vector<Food>& foods, int *number_of_living_hosts) {
     }
 }
 
+// Make a host "eat" the food
 bool Host::eat(Food *food) {
     // Decrement the timer
     //eatingTimer--;
@@ -339,8 +360,6 @@ bool Host::eat(Food *food) {
     // increase hosts's energy while eating
     this->increase_energy(food);
 
-    //currentFood->setTimer(eatingTimer); // Why this is segfault?
-
     if (food == NULL || (food != NULL && food->getTimer() <= 0)) {
         // Eating time is over, remove the consumed food
         return false;
@@ -349,6 +368,7 @@ bool Host::eat(Food *food) {
     return true;
 }
 
+// Make a host battle another for energy
 void Host::battle(Food *food) {
     Host *host2;
     
@@ -361,14 +381,14 @@ void Host::battle(Food *food) {
         int h = generate_random_integer(0, (food->eatingHostsSize()) - 2);
         host2 = food->getHost(h);
         if(this->gene.shape.h > host2->gene.shape.h){
-            energy = host2->energy / 2;
+            energy = host2->energy * CONFIG["AGGRESSIVENESS_GAIN"];
             this->energy += energy;
             if (this->energy > CONFIG["MAX_ENERGY"])
                 this->energy = CONFIG["MAX_ENERGY"];
             host2->energy -= energy;
             //host2->state = TARGETED;
         } else {
-            energy = this->energy / 2;
+            energy = this->energy * CONFIG["AGGRESSIVENESS_GAIN"];
             this->energy -= energy;
             host2->energy += energy;
             if (host2->energy > CONFIG["MAX_ENERGY"])
@@ -378,6 +398,7 @@ void Host::battle(Food *food) {
     }
 }
 
+// Tries to find food in the host field of vision
 bool Host::findFoodInVision(std::vector<Food>& foods) {
     float visionRadius = this->gene.fov;
 
@@ -387,14 +408,15 @@ bool Host::findFoodInVision(std::vector<Food>& foods) {
         float distance = sqrt(pow(dx, 2) + pow(dy, 2));
 
         if (distance <= visionRadius) {
-            this->currentFood = &food; // Comida encontrada no campo de visão
+            this->currentFood = &food; // Food found in the field of vision
             return true;
         }
     }
 
-    return false; // Indica que nenhuma comida foi encontrada
+    return false; // Indicates that no food was found
 }
 
+// Make host go to a position
 void Host::goTo(position_t position) {
     float dx = position.x - this->pos.x;
     float dy = position.y - this->pos.y;
@@ -428,10 +450,12 @@ void Host::goTo(position_t position) {
         this->pos.y = 1 - halfHeight;
 }
 
+// Make host got to a food
 void Host::goToFood() {
     this->goTo({ this->currentFood->getX(), this->currentFood->getY() });
 }
 
+// Check if host has found food
 bool Host::hasFoundFood() {
     float food_x = currentFood->getX();
     float food_y = currentFood->getY();
@@ -454,6 +478,7 @@ bool Host::hasFoundFood() {
     return false;
 }
 
+// Compare two positons with a given tolerance
 bool Host::comparePositionsWithTolerance(position_t pos1, position_t pos2, float tolerance) {
     return abs(pos1.x - pos2.x) <= tolerance && abs(pos1.y - pos2.y) <= tolerance;
 }

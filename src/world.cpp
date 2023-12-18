@@ -7,17 +7,19 @@
 
 #include "world.h"
 
+// Update everything based on the current conditions
 void World::update() {
     // Display the food
     for (const auto& food : this->Foods) {
         food.show_food();
     }
 
+    // Update hosts
     for (auto it : this->Hosts) {
         it->update(this->Foods, &this->number_of_living_hosts);
     }
 
-    //std::cout << "living hosts: " << this->number_of_living_hosts << " / " << this->hosts_qtd << '\n';
+    // Reproduction Algorithm
     if(this->number_of_living_hosts <= 4.0/5.0 * hosts_qtd){
         run_reproduction_algorithm();
         printf("New group after reproduction:\n");
@@ -28,15 +30,15 @@ void World::update() {
         
 }
 
+// Reproduces hosts to fill the dead hosts spots
 void World::run_reproduction_algorithm() {
     std::cout << "reproducing remaining hosts\n";
 
     auto host = Hosts.begin();
 
-    //std::vector<Host *> new_hosts;
     while (host != Hosts.end()) {
         if ((*host)->state == DEAD) {
-            Host *parent_1 = tournament_selection();
+            Host *parent_1 = tournament_selection(); // Twos tournament
             Host *parent_2 = tournament_selection();
 
             if(parent_1 == NULL || parent_2 == NULL) {
@@ -58,6 +60,7 @@ void World::run_reproduction_algorithm() {
     }
 }
 
+// Twos tournament, gives priority to the highest energy
 Host *World::tournament_selection() {
     if(this->number_of_living_hosts <= 0) return NULL;
 
@@ -74,7 +77,7 @@ Host *World::tournament_selection() {
     return this->Hosts.at(second)->energy > this->Hosts.at(first)->energy ? this->Hosts.at(second) : this->Hosts.at(first);
 }
 
-// Function to create and add multiple Hosts to a vector
+// Function to create the initial host population and add them to the Hosts vector
 void World::create_initial_population(std::vector<Host*>& Hosts, int hosts_qty) {
     printf("Original group:\n");
     for (int i = 0; i < hosts_qty; ++i) {
@@ -84,6 +87,7 @@ void World::create_initial_population(std::vector<Host*>& Hosts, int hosts_qty) 
     }
 }
 
+// Two hosts reproduction mechanism
 Host *World::reproduce_hosts(Host *parent_1, Host *parent_2) {
     gene_t gene;
     Host *host;
@@ -105,6 +109,7 @@ Host *World::reproduce_hosts(Host *parent_1, Host *parent_2) {
     return host;
 }
 
+// Clear all host population
 void World::clear_population(std::vector<Host*>& Hosts) {
     for (auto host : Hosts) {
         delete host; // Deallocate memory for each Host

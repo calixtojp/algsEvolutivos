@@ -1,5 +1,6 @@
 #include "utils.h"
 
+// Generate a random float
 float generate_random(float lower, float upper) {
     // Initialize a random number generator engine
     std::random_device rd;  // Seed the random number generator
@@ -10,6 +11,7 @@ float generate_random(float lower, float upper) {
     return distribution(gen);
 }
 
+// Generate a random integer
 int generate_random_integer(int lower, int upper) {
         // Initialize a random number generator engine
     std::random_device rd;  // Seed the random number generator
@@ -20,6 +22,7 @@ int generate_random_integer(int lower, int upper) {
     return distribution(gen);
 }
 
+// Read the config file to get its parameters
 std::unordered_map<std::string, float> readConfig(const std::string& filename) {
     std::unordered_map<std::string, float> config;
     std::ifstream file(filename);

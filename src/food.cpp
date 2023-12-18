@@ -1,6 +1,7 @@
 #include "food.h"
 #include "host.h"
 
+// Create the initial food population
 void create_food_population(std::vector<Food>& foods, int food_qty) {
     for (int i = 0; i < food_qty; ++i) {
         float pos_x = generate_random(-1, 1);
@@ -11,18 +12,22 @@ void create_food_population(std::vector<Food>& foods, int food_qty) {
     }
 }
 
+// Set food position
 void Food::setPosition(float newX, float newY) {
     this->x = newX;
     this->y = newY;
 }
 
+// Set food timer
 void Food::setTimer(int newT){ foodTimer = newT; }
 
+// Generate a random new position for food
 void Food::randPosition(){
     x = generate_random(-1, 1);
     y = generate_random(-1, 1);
 }
 
+// Show food in the simulation
 void Food::show_food() const {
     glColor3f(0.0f, 0.0f, 0.0f); // Standard black color
     glBegin(GL_POLYGON);
@@ -35,8 +40,10 @@ void Food::show_food() const {
     glEnd();
 }
 
+// Decrease food timer
 void Food::decreaseTimer(){ this->foodTimer--; }
 
+// Update a food if its timer reaches 0
 void Food::update() {
     if(this->getTimer() <= 0) {
         this->notifyTimerExpired();
@@ -45,10 +52,12 @@ void Food::update() {
     }
 }
 
+// Register a host in the vector of eatingHosts
 void Food::registerHost(Host* host) {
     eatingHosts.push_back(host);
 }
 
+// Notify all hosts eating this food that its timer expired
 void Food::notifyTimerExpired() {
     for (Host* host : eatingHosts) {
         host->state = LOOKING_FOR_FOOD;
@@ -56,16 +65,18 @@ void Food::notifyTimerExpired() {
     eatingHosts.clear(); // Limpa o registro
 }
 
+// Check if eatingHosts vector is empty
 bool Food::eatingHostsEmpty(){
     if(eatingHosts.size() == 0) return true;
     return false;
 }
 
+// Check size of eatingHosts vector
 int Food::eatingHostsSize(){
     return eatingHosts.size();
 }
 
-// cruzamento dos memes de hosts comendo a mesma comida
+// crossover of hosts' aggressiveness while they are eating the same food
 void Food::contaminateHosts(Host *new_host){
     float chance, coin;
 

@@ -29,6 +29,7 @@ void draw();
 void timer(int);
 
 World *world;
+//Function to enable OpenGL
 void OpenGlSetup(int *argc, char** argv);
 
 int main(int argc, char** argv){
@@ -42,26 +43,26 @@ int main(int argc, char** argv){
 }
 
 void draw(){
-    // Importante: Somente será desenhado o que estiver entre glClear e glEnd
+    // Important: Only what is between glClear and glEnd will be drawn
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // A tela padrão do OpenGL tem suas coordenadas X e Y de -1 até 1
-    // Coordenada (-1 -1) é o canto inferior esquerdo
-    // Coordenada (-1 1) é o canto superior esquerdo
-    // Coordenada (0 0) é o centro da tela
+    // The default OpenGL screen has its X and Y coordinates from -1 to 1
+    // Coordinate (-1 -1) is the bottom left corner
+    // Coordinate (-1 1) is the top left corner
+    // Coordinate (0 0) is the center of the screen
     world->update();
 
     glutSwapBuffers();
 }
 
 void timer(int){
-    // Executa a função draw para desenhar novamente
+    // Execute the draw function to draw again
     glutPostRedisplay();
 
 
-    // O primeiro parâmetro define de quanto em quanto tempo em milissegundos timer será chaamdo
-    // Eu coloquei 1000/60 para definir que vai atualizar a 60hz
-    glutTimerFunc(1000/60, timer, 0);// Garante que esta função será chamada de novo
+    // The first parameter defines how often in milliseconds the timer will be called
+    // I put 1000/60 to define that it will update at 60hz
+    glutTimerFunc(1000/60, timer, 0);// Guarantees that this function will be called again
 }
 
 void OpenGlSetup(int *argc, char** argv) {
@@ -70,8 +71,8 @@ void OpenGlSetup(int *argc, char** argv) {
     glutInitWindowSize(windowWidth, windowHeight);
     glutInitWindowPosition(0, 0);
     glutCreateWindow("Testando OpenGL");
-    glClearColor(1.0, 1.0, 1.0, 1.0);// Limpa a tela (red, green, blue, alpha)
-    glutDisplayFunc(draw);// Define qual função irá desenhar
-    glutTimerFunc(0, timer, 0);// Define qual será a função de loop
+    glClearColor(1.0, 1.0, 1.0, 1.0);// Cleans the screen (red, green, blue, alpha)
+    glutDisplayFunc(draw);// Defines which function will draw
+    glutTimerFunc(0, timer, 0);// Define what the loop function will be
     glutMainLoop();
 }
