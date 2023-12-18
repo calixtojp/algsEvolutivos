@@ -79,7 +79,7 @@ void Host::show_aggression_graphically(void){
     glColor3f(1, 0, 0);//Energia será azul
     glBegin(GL_POLYGON);// Fala para o OpenGL que os próximos pontos serão para desenhar um polígono
 
-    float agress_ratio = this->aggressiveness / CONFIG["AGGRESSIVENESS_THRESHHOLD"];
+    float agress_ratio = this->aggressiveness / CONFIG["AGGRESSIVENESS_TRESHHOLD"];
 
     // Adicionada cada vértice do retângulo:
     //Inferior esquerdo:
@@ -208,27 +208,43 @@ void Host::decrease_energy(float subtracted_qtd) {
     this->energy -= subtracted_qtd;
 }
 
-/*float calculate_speed_based_on_size(float speed_upper_bound, float speed_lower_bound, 
+float calculate_speed_based_on_size(float speed_upper_bound, float speed_lower_bound, 
                                     float size_lower_bound, float size_upper_bound, float size) {
-    float size_magnitude = size / (size_upper_bound - size_lower_bound);
-    float speed = pow((1 / size_magnitude), 2) * (speed_upper_bound - speed_lower_bound);
+    //float size_magnitude = size / (size_upper_bound - size_lower_bound);
+    //float speed = pow((1 / size_magnitude), 2) * (speed_upper_bound - speed_lower_bound);
+
+    float speed = (size_upper_bound - size) / (size_upper_bound / speed_upper_bound);
 
     return speed;
-}*/
+}
 
 void Host::mutate() {
-    int factor = 1;
-    if(coin_toss())
-        factor = -1;
+    this->gene.shape.h = mutate_float_value(this->gene.shape.h);
+    this->gene.shape.w = this->gene.shape.h;
 
-    this->gene.shape.h = abs(this->gene.shape.h * (1 + factor * CONFIG["MUTATION_MULTIPLICATIVE_MODIFIER"]));
-    this->gene.shape.w = abs(this->gene.shape.w * (1 + factor * CONFIG["MUTATION_MULTIPLICATIVE_MODIFIER"]));
+    this->speed = calculate_speed_based_on_size(CONFIG["SPEED_UPPER"], CONFIG["SPEED_LOWER"], 
+            CONFIG["SHAPE_LOWER"], CONFIG["SHAPE_UPPER"], this->gene.shape.h);
 
     this->gene.color.R = mutate_color(this->gene.color.R);
     this->gene.color.G = mutate_color(this->gene.color.G);
     this->gene.color.B = mutate_color(this->gene.color.B);
 
-    this->gene.fov = abs(this->gene.fov * (1 + factor * CONFIG["MUTATION_MULTIPLICATIVE_MODIFIER"]));
+    this->aggressiveness = mutate_float_value(this->aggressiveness);
+
+    this->gene.fov = mutate_float_value(this->gene.fov);
+}
+
+float Host::mutate_float_value(float value) {
+    int factor = 1;
+    float mutated_value;
+    
+    if(coin_toss())
+        factor = -1;
+
+    mutated_value = abs((value + factor * (CONFIG["MUTATION_ADDITIVE_MODIFIER"] / 2)) * 
+        (1 + factor * CONFIG["MUTATION_MULTIPLICATIVE_MODIFIER"]));
+
+    return mutated_value;
 }
 
 float Host::mutate_color(float color_value) {
@@ -250,12 +266,6 @@ void Host::update(std::vector<Food>& foods, int *number_of_living_hosts) {
     switch (this->state) {
         case LOOKING_FOR_FOOD: {
             position_t random = { generate_random(-1, 1), generate_random(-1, 1) };
-            // if(this->random_movement_timer == 0) {
-            //     this->random_movement_timer = CONFIG["RANDOM_MOVEMENT_TIMER"];
-            // }
-            // if(this->random_movement_timer == CONFIG["RANDOM_MOVEMENT_TIMER"]) {
-            //     this->going_to = random;
-            // }
 
             this->random_movement_timer--;
 
@@ -288,7 +298,8 @@ void Host::update(std::vector<Food>& foods, int *number_of_living_hosts) {
             this->state = EATING;
             break;
         case TARGETED:
-            /* code */
+            if(currentFood == NULL || (currentFood != NULL && currentFood->getTimer() <= 0))
+                this->state = LOOKING_FOR_FOOD;
             break;
         case ATTACKING:
             /* code */
@@ -355,12 +366,14 @@ void Host::battle(Food *food) {
             if (this->energy > CONFIG["MAX_ENERGY"])
                 this->energy = CONFIG["MAX_ENERGY"];
             host2->energy -= energy;
+            //host2->state = TARGETED;
         } else {
             energy = this->energy / 2;
             this->energy -= energy;
             host2->energy += energy;
             if (host2->energy > CONFIG["MAX_ENERGY"])
                 host2->energy = CONFIG["MAX_ENERGY"];
+            //this->state = TARGETED;
         }
     }
 }
