@@ -210,8 +210,10 @@ void Host::decrease_energy(float subtracted_qtd) {
 
 float calculate_speed_based_on_size(float speed_upper_bound, float speed_lower_bound, 
                                     float size_lower_bound, float size_upper_bound, float size) {
-    float size_magnitude = size / (size_upper_bound - size_lower_bound);
-    float speed = pow((1 / size_magnitude), 2) * (speed_upper_bound - speed_lower_bound);
+    //float size_magnitude = size / (size_upper_bound - size_lower_bound);
+    //float speed = pow((1 / size_magnitude), 2) * (speed_upper_bound - speed_lower_bound);
+
+    float speed = (size_upper_bound - size) / (size_upper_bound / speed_upper_bound);
 
     return speed;
 }
