@@ -2,6 +2,9 @@
 
 ## Teoria memética
 Este projeto é inspirado na teoria memética de Richard Dawkins, que postula que as ideias, ou "memes" (unidades básicas de informações culturais), evoluem e se espalham através de um processo semelhante à seleção natural biológica. No contexto desta simulação, o objetivo é _modelar a evolução dos memes e de seus portadores dentro de uma população de hospedeiros_, onde os memes influenciam o comportamento dos hospedeiros e, em última análise, a sua sobrevivência.
+
+[![Explicação](https://i3.ytimg.com/vi/MGWM74QOTaM/maxresdefault.jpg)](https://youtu.be/MGWM74QOTaM)
+
 ### Reprodução dos memes:
 Os memes que aumentam as chances de sobrevivência e reprodução de um hospedeiro têm maior probabilidade de serem replicados e transmitidos às gerações subsequentes. Na simulação, os memes bem-sucedidos são aqueles que contribuem positivamente para a capacidade de um hospedeiro encontrar e garantir alimentos, navegar no seu ambiente e envolver-se em disputas com outros hospedeiros.
 ### Seleção Natural de Hospedeiros
@@ -19,8 +22,14 @@ O projeto foi desenvolvido completamente em C++, onde foram construídas as clas
 Ao longo de uma simulação será gerada uma _população inicial aleatória_ de Hosts com características físicas aleatórias e cada um com um meme aleatório em relação às características de _mecanismos de decisão_ (velocidade, agressividade, etc...). 
 ### Sobrevivência
 Os Hosts são livres para se movimentar até que encontrem um alimento. Quando encontrarem um alimento, o Host terá um tempo determinado para comer aquele alimento, _se outro Host encontrar o mesmo alimento, então eles irão disputar aquela comida_. 
+
+[![Velocidade gasta energia](https://i3.ytimg.com/vi/5Pm5ji7GLlg/maxresdefault.jpg)](https://youtu.be/5Pm5ji7GLlg)
+
 ### Disputa
 As condições de _disputa serão diretamente ligadas aos memes que infectam_ determinados hosts. Por exemplo, se dois hosts agressivos se encontrarem, os dois sairão prejudicados pois provavelmente vão gastar mais energia disputando a comida do que a própria comida pode oferecer. Se dois hosts passivos encontrarem a comida, então os dois irão partilhar a comida. Se um Host fica com a energia muito baixa, então ele morre.
+
+[![Tamanho gasta Energia](https://i3.ytimg.com/vi/tJpqZK6Y-ns/maxresdefault.jpg)](https://youtube.com/shorts/tJpqZK6Y-ns)
+
 ### Fim da geração e fitness
 Quando uma porção da população morre (por padrão 1/5), então algum algorítmo de seleção será ativado para reproduzir os Hosts a partir dos sobreviventes. _Um Host será considerado hápto se tiver mais energia restante que os demais._
 ### Geração de uma nova geração
@@ -29,6 +38,12 @@ Quando ocorre a reprodução, um Host gerado _irá herdar a combinação física
 # Conclusões do projeto
 ## Comportamentos predominantes
 Em condições normais (0.2 em todos os custos energéticos atrelados a velocidade, tamanho, etc...) a agressividade tende a convergir para 0.5 para qualquer um dos indivíduos. Em geral, indivíduos tendem a não ir muito para extremos de agressividade - isto é, para 0 ou 1. A razão disso, é o comportamento anômalo do meme em relação ao mecanismo de reprodução no que diz respeito ao comportamento de agressividade: quando hosts se encontram em uma comida, há a troca de memes entre eles.
+
+[![Pacíficos](https://i3.ytimg.com/vi/P-D0qH5dcRE/maxresdefault.jpg)](https://youtube.com/shorts/P-D0qH5dcRE)
+
 Quando a agressividade converge para um valor pouco maior que 0.5, o tamanho dos hosts tende a ser maior devido a vantagem do tamanho em um ambiente com maior número de disputas. Já quando a agressividade converge para um valor pouco menor que 0.5 o tamanho tende a ser diminuto pelo menor número de disputas e pelo tamanho ser inversamente proporcional à velocidade o que faz com que o host opte por ser menor e mais rápido.
+
+[![Agressivos](https://i3.ytimg.com/vi/8kp_reUEf9c/maxresdefault.jpg)](https://youtu.be/8kp_reUEf9c)
+
 ## Comportamentos em escassez de alimentos
 Nessa simulação, diminuímos a quantidade de comidas e diminuímos o tempo que cada comida fica disponível aos hosts. Com isso as características que consomem energia tendem a diminuir por conta das mortes que aumentarem. Portanto, hosts tendem a ser pequenos e com campo de visão menor. Esses foram os comportamentos que diminuíram o gasto energético, visto que a chance de encontrar comida é muito pequena
